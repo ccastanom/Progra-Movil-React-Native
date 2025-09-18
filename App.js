@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import {
-  StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, SafeAreaView, StatusBar,
-} from "react-native";
+  StyleSheet, Text, View, TextInput, TouchableOpacity, ImageBackground, SafeAreaView, StatusBar,} from "react-native";
 import SvgIcon from "./assets/SvgIcon"; // Logo en formato SVG
+import Fondo from "./assets/fondo.jpeg";
 
 export default function App() {
   // Estado para manejar el email ingresado
@@ -32,9 +32,7 @@ export default function App() {
 
         {/* -------- IMAGEN PRINCIPAL -------- */}
         <ImageBackground
-          source={{
-            uri: "https://th.bing.com/th/id/R.d6e7cc7a29721d358f255729108135a8?rik=nfGiyylt%2fsLYWg&riu=http%3a%2f%2f3.bp.blogspot.com%2f-C6acQp130xM%2fUuJUwMfOWrI%2fAAAAAAAAANM%2fIBL_LaqMonE%2fs1600%2fSpring-Rolls.jpg&ehk=41s8wJFEouA5MKph9cwV1%2bc3%2fYbna7UhlKo%2becaOGLI%3d&risl=&pid=ImgRaw&r=0",
-          }}
+          source={require("./assets/fondo.jpeg")}
           style={styles.headerImage}
           imageStyle={{ resizeMode: "cover" }} // Imagen se ajusta al contenedor
         >
@@ -85,7 +83,7 @@ const styles = StyleSheet.create({
 
   /* -------- NAVBAR -------- */
   navBar: {
-  height: 100,
+  height: 75,
   backgroundColor: "#ffffffcc", // Fondo blanco semitransparente
   flexDirection: "row",
   alignItems: "center",
@@ -123,8 +121,8 @@ const styles = StyleSheet.create({
 
   /* -------- IMAGEN PRINCIPAL -------- */
   headerImage: {
-    width: "110%", // Un poco más ancho para que llegue al borde
-    height: 350,
+    width: "105%", // Un poco más ancho para que llegue al borde
+    height: 400,
     justifyContent: "flex-end",
     padding: 20,
   },
