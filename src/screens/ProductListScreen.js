@@ -14,11 +14,11 @@ import NavBar from "../components/NavBar";
 // Si ya tienes este array en otro archivo, usa el tuyo.
 // Recuerda que los precios deben ser números (p. ej. 15900, no 15.900).
 const PRODUCTS = [
-  { id: "p1", name: "Panela Roll",     price: 15900, image: require("../../assets/products/Panela_Roll.jpg") },
-  { id: "p2", name: "Nueces Pecanas",  price: 13900, image: require("../../assets/products/Nueces_pecanas.jpg") },
-  { id: "p3", name: "Nutella Ferrero", price: 14400, image: require("../../assets/products/Nutella_ferrero.jpg") },
-  { id: "p4", name: "Strawberrys",     price: 12900, image: require("../../assets/products/Strawberrys.jpg") },
-  { id: "p5", name: "Chesscake Roll",  price: 12900, image: require("../../assets/products/Chesscake_Roll.jpg") },
+  { id: "p1", name: "Panela Roll",     price: 15900, image: require("../../assets/products/Panela_Roll.jpg"), description: "Rollo artesanal con dulce de panela y un toque de canela. Perfecto para acompañar con café." },
+  { id: "p2", name: "Nueces Pecanas",  price: 13900, image: require("../../assets/products/Nueces_pecanas.jpg"), description: "Suave masa de rollo cubierta con caramelo y nueces pecanas crocantes."  },
+  { id: "p3", name: "Nutella Ferrero", price: 14400, image: require("../../assets/products/Nutella_ferrero.jpg"), description: "Rollo relleno de Nutella y decorado con trozos de Ferrero Rocher." },
+  { id: "p4", name: "Strawberrys",     price: 12900, image: require("../../assets/products/Strawberrys.jpg"), description: "Clásico rollo con topping de fresas frescas y glaseado cremoso." },
+  { id: "p5", name: "Chesscake Roll",  price: 12900, image: require("../../assets/products/Chesscake_Roll.jpg"),  description: "Fusión entre cheesecake y rollo de canela, con una cobertura de queso crema." },
 ];
 
 export default function ProductListScreen({ navigation }) {
@@ -55,7 +55,6 @@ export default function ProductListScreen({ navigation }) {
         style={styles.headerImage}
         imageStyle={{ resizeMode: "cover" }}
       >
-        <View style={styles.headerOverlay} />
         <Text style={styles.headerTitle}>Productos</Text>
       </ImageBackground>
 
@@ -83,10 +82,6 @@ export default function ProductListScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   headerImage: { height: 160, justifyContent: "flex-end" },
-  headerOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(233, 30, 99, 0.5)", // fucsia semitransparente
-  },
   headerTitle: { color: "#fff", fontSize: 28, fontWeight: "800", padding: 16 },
 
   content: { flex: 1, padding: 16, gap: 12 },

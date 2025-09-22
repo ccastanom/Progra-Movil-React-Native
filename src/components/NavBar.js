@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import SvgIcon from "../../assets/SvgIcon"; // ajusta la ruta según tu estructura
+import { View, Text, StyleSheet } from "react-native";
+import SvgIcon from "../../assets/SvgIcon";
 
 export default function NavBar() {
   return (
@@ -10,10 +10,8 @@ export default function NavBar() {
         <SvgIcon width={40} height={40} />
       </View>
 
-      {/* Botón superior */}
-      <TouchableOpacity style={styles.topButton}>
-        <Text style={styles.topButtonText}>QUIERO MI ROLLO</Text>
-      </TouchableOpacity>
+      {/* Marca centrada (ya no es botón) */}
+      <Text style={styles.brand}>QUE ROLLO</Text>
 
       {/* Menú hamburguesa */}
       <Text style={styles.menuIcon}>☰</Text>
@@ -36,12 +34,16 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   logoWrap: { justifyContent: "center", alignItems: "center" },
-  topButton: {
-    backgroundColor: "#E91E63",
-    paddingVertical: 9,
-    paddingHorizontal: 15,
-    borderRadius: 20,
+
+  // Estilo para el logo de marca
+  brand: {
+    fontSize: 24,          // más grande
+    fontWeight: "900",     // más grueso
+    color: "#E91E63",      // fucsia
+    letterSpacing: 2,      // más espacio entre letras
+    textTransform: "uppercase",
   },
-  topButtonText: { color: "#fff", fontWeight: "bold", fontSize: 15 },
+
   menuIcon: { fontSize: 28, color: "#E91E63" },
 });
+
