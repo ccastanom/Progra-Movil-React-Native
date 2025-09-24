@@ -1,3 +1,6 @@
+// Pantalla de entrada: - Muestra marca y slogan con imagen de fondo
+// - Botón "Continuar" que navega a la lista de productos
+
 import React from "react";
 import {
   StyleSheet,
@@ -17,7 +20,7 @@ export default function LoginScreen({ navigation }) {
           <SvgIcon width={40} height={40} />
         </View>
         <Text style={styles.brand}>QUE ROLLO</Text>
-        <Text style={styles.menuIcon}>☰</Text>
+        <View style={{ width: 28 }} />
       </View>
 
       {/* Imagen de fondo con frase */}

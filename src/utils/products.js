@@ -1,3 +1,6 @@
+
+// Datos separados en utils para no mezclar lógica de datos con UI.
+
 export const PRODUCTS = [
   { id: "p1", name: "Panela Roll",     price: 15900, image: require("../../assets/products/Panela_Roll.jpg"), description: "Rollo artesanal con dulce de panela y un toque de canela. Perfecto para acompañar con café." },
   { id: "p2", name: "Nueces Pecanas",  price: 13900, image: require("../../assets/products/Nueces_pecanas.jpg"), description: "Suave masa de rollo cubierta con caramelo y nueces pecanas crocantes." },
