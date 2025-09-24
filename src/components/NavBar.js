@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
 import { useNavigation } from "@react-navigation/native";
 
-export default function NavBar({ showBack = false }) {
+export default function NavBar({ showBack = false, hideMenu = false }) {
   const navigation = useNavigation();
 
   return (
@@ -19,6 +19,8 @@ export default function NavBar({ showBack = false }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.menuIcon}>←</Text>
         </TouchableOpacity>
+      ) : hideMenu ? (
+        <View style={{ width: 28 }} /> // mantiene el balance visual
       ) : (
         <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
           <Text style={styles.menuIcon}>☰</Text>
