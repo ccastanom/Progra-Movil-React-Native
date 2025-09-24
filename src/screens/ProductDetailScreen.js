@@ -1,4 +1,4 @@
-// src/screens/ProductDetailScreen.js
+// - Recibe "route" desde React Navigation para obtener params (product)
 import React, { useState } from "react";
 import {
   View,
@@ -14,24 +14,27 @@ import { money } from "../utils/format";
 
 
 export default function ProductDetailScreen({ route }) {
+  // product llega desde la lista: navigation.navigate("ProductDetail", { product })
   const { product } = route.params; // { id, name, price, image, description? }
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(1);  // cantidad seleccionada
 
+  // Cálculo del total (precio * cantidad)
   const total = product.price * qty;
 
+  // Estructura: NavBar -> Imagen grande -> info (nombre, precio, desc) -> cantidad/total/botón
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>
       {/* Barra superior con logo/marca */}
       <NavBar />
 
-      {/* Imagen nítida sin overlay */}
+      {/* Imagen principal del producto */}
       <Image source={product.image} style={styles.heroImage} />
 
       {/* Título y precio */}
       <Text style={styles.title}>{product.name}</Text>
       <Text style={styles.price}>Precio: {money(product.price)}</Text>
 
-      {/* Descripción (opcional) */}
+      {/* Descripción */}
       {product.description ? (
         <Text style={styles.description}>{product.description}</Text>
       ) : null}
@@ -43,10 +46,10 @@ export default function ProductDetailScreen({ route }) {
         <Button title="+" onPress={() => setQty(q => q + 1)} />
       </View>
 
-      {/* Total */}
+      {/* Total calculado*/}
       <Text style={styles.total}>Total: {money(total)}</Text>
 
-      {/* Comprar */}
+      {/* Boton de compra simulada */}
       <View style={{ marginTop: 8 }}>
         <Button
           title="Comprar"
@@ -63,10 +66,11 @@ export default function ProductDetailScreen({ route }) {
   );
 }
 
+//ESTILOS 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fafafa", padding: 16 },
 
-  // Imagen principal SIN filtro
+  // Imagen principal del detalle (hero)
   heroImage: {
     width: "100%",
     height: 260,
