@@ -10,6 +10,8 @@ import {
   ScrollView,
 } from "react-native";
 import NavBar from "../components/NavBar";
+import { money } from "../utils/format";
+
 
 export default function ProductDetailScreen({ route }) {
   const { product } = route.params; // { id, name, price, image, description? }
@@ -27,7 +29,7 @@ export default function ProductDetailScreen({ route }) {
 
       {/* Título y precio */}
       <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.price}>Precio: ${product.price.toLocaleString()}</Text>
+      <Text style={styles.price}>Precio: {money(product.price)}</Text>
 
       {/* Descripción (opcional) */}
       {product.description ? (
@@ -42,7 +44,7 @@ export default function ProductDetailScreen({ route }) {
       </View>
 
       {/* Total */}
-      <Text style={styles.total}>Total: ${total.toLocaleString()}</Text>
+      <Text style={styles.total}>Total: {money(total)}</Text>
 
       {/* Comprar */}
       <View style={{ marginTop: 8 }}>
