@@ -10,7 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import NavBar from "../components/NavBar";
 import { useUi } from "../context/UiContext";
 
-const BAR_HEIGHT = 56; // altura visual estimada de tu NavBar (coincide con tu diseño)
+const BAR_HEIGHT = 56; // altura visual estimada
 
 export default function SettingsScreen() {
   // Estado global de UI (tema y escala de fuente)
