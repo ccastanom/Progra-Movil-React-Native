@@ -12,19 +12,15 @@ import {
 import NavBar from "../components/NavBar";
 import { PRODUCTS } from "../utils/products";
 
-// Recibe { navigation } desde React Navigation
 export default function ProductListScreen({ navigation }) {
-  // Estado de búsqueda
   const [q, setQ] = useState("");
 
-  //  Filtro memorizado: Si no cambia "q", no recalcula. Si "q" está vacío, muestra todo.
   const filtered = useMemo(() => {
     const t = q.trim().toLowerCase();
     if (!t) return PRODUCTS;
     return PRODUCTS.filter(p => p.name.toLowerCase().includes(t));
   }, [q]);
 
-  //  Render de cada ítem: Al tocar una tarjeta, navega al detalle y pasa el producto por params.
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate("ProductDetail", { product: item })}
@@ -39,7 +35,6 @@ export default function ProductListScreen({ navigation }) {
     </TouchableOpacity>
   );
 
-  //RENDER: Estructura: NavBar -> Header con imagen -> Buscador + Lista
   return (
     <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
       {/* Navbar fijo */}
@@ -79,7 +74,6 @@ export default function ProductListScreen({ navigation }) {
   );
 }
 
-//ESTILOS
 const styles = StyleSheet.create({
   headerImage: { height: 160, justifyContent: "flex-end" },
   headerTitle: { color: "#fff", fontSize: 28, fontWeight: "800", padding: 16 },

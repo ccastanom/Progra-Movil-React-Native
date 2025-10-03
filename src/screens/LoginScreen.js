@@ -1,7 +1,3 @@
-// Pantalla de entrada: - Muestra marca y slogan con imagen de fondo
-// - Botón "Continuar" que navega a la lista de productos
-
-import React from "react";
 import {
   StyleSheet,
   Text,

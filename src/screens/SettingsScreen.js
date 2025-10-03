@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -93,7 +92,6 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  // Contenedor base
   container: { flex: 1 },
 
   // Tarjetas/secciones de ajustes

@@ -1,42 +1,31 @@
-// src/components/NavBar.js
-import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
 import { useNavigation } from "@react-navigation/native";
 
-// Barra superior reutilizable.
-// Props:
-// - showBack: si es true, muestra flecha para volver.
-// - hideMenu: si es true, oculta el icono de menú.
 export default function NavBar({ showBack = false, hideMenu = false }) {
   const navigation = useNavigation();
 
   return (
     <View style={styles.navBar}>
-      {/* Logo a la izquierda */}
+
       <View style={styles.logoWrap}>
         <SvgIcon width={40} height={40} />
       </View>
 
-      {/* Marca centrada */}
       <Text style={styles.brand}>QUE ROLLO</Text>
 
-      {/* Lado derecho: según props muestra back, espacio o menú */}
       {showBack ? (
         <>
-          {/* Flecha para volver atrás en la navegación */}
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={styles.menuIcon}>←</Text>
           </TouchableOpacity>
         </>
       ) : hideMenu ? (
         <>
-          {/* Mantiene el balance visual cuando no mostramos menú */}
           <View style={{ width: 28 }} />
         </>
       ) : (
         <>
-          {/* Menú que navega a la pantalla de ajustes */}
           <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
             <Text style={styles.menuIcon}>☰</Text>
           </TouchableOpacity>

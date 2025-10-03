@@ -1,4 +1,3 @@
-// - Recibe "route" desde React Navigation para obtener params (product)
 import React, { useState } from "react";
 import {
   View,
@@ -14,14 +13,12 @@ import { money } from "../utils/format";
 
 
 export default function ProductDetailScreen({ route }) {
-  // product llega desde la lista: navigation.navigate("ProductDetail", { product })
   const { product } = route.params; // { id, name, price, image, description? }
   const [qty, setQty] = useState(1);  // cantidad seleccionada
 
   // Cálculo del total (precio * cantidad)
   const total = product.price * qty;
 
-  // Estructura: NavBar -> Imagen grande -> info (nombre, precio, desc) -> cantidad/total/botón
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>
       {/* Barra superior con logo/marca */}
@@ -66,7 +63,7 @@ export default function ProductDetailScreen({ route }) {
   );
 }
 
-//ESTILOS 
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fafafa", padding: 16 },
 
