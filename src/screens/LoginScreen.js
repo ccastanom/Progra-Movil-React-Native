@@ -6,20 +6,22 @@ import {
   ImageBackground,
 } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
+import useThemeColors from "../styles/themes";
 
 export default function LoginScreen({ navigation }) {
+  const { colors } = useThemeColors();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.bg }]}>
       {/* NavBar */}
-      <View style={styles.navBar}>
+      <View style={[styles.navBar, { backgroundColor: colors.card }]}>
         <View style={styles.logoWrap}>
           <SvgIcon width={40} height={40} />
         </View>
-        <Text style={styles.brand}>QUE ROLLO</Text>
+        <Text style={[styles.brand, { color: colors.text }]}>QUE ROLLO</Text>
         <View style={{ width: 28 }} />
       </View>
 
-      {/* Imagen de fondo con frase */}
+      {/* Imagen de fondo */}
       <ImageBackground
         source={require("../../assets/fondo.jpeg")}
         style={styles.headerImage}
@@ -32,10 +34,10 @@ export default function LoginScreen({ navigation }) {
         </View>
       </ImageBackground>
 
-      {/* Botón continuar */}
+      {/* Botón */}
       <View style={styles.content}>
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, { backgroundColor: colors.primary }]}
           onPress={() => navigation.navigate("ProductList")}
         >
           <Text style={styles.buttonText}>Continuar</Text>

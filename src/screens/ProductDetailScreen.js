@@ -10,51 +10,71 @@ import {
 } from "react-native";
 import NavBar from "../components/NavBar";
 import { money } from "../utils/format";
-
+import useThemeColors from "../styles/themes";
 
 export default function ProductDetailScreen({ route }) {
-  const { product } = route.params; // { id, name, price, image, description? }
-  const [qty, setQty] = useState(1);  // cantidad seleccionada
+  const { colors } = useThemeColors();
+  const { product } = route.params;
+  const [qty, setQty] = useState(1);
 
-  // Cálculo del total (precio * cantidad)
   const total = product.price * qty;
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>
-      {/* Barra superior con logo/marca */}
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.bg }]}
+      contentContainerStyle={{ paddingBottom: 24 }}
+    >
       <NavBar />
 
-      {/* Imagen principal del producto */}
+      {/* Imagen del producto */}
       <Image source={product.image} style={styles.heroImage} />
 
-      {/* Título y precio */}
-      <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.price}>Precio: {money(product.price)}</Text>
+      {/* Nombre y precio */}
+      <Text style={[styles.title, { color: colors.text }]}>
+        {product.name}
+      </Text>
+      <Text style={[styles.price, { color: colors.subtext }]}>
+        Precio: {money(product.price)}
+      </Text>
 
       {/* Descripción */}
       {product.description ? (
-        <Text style={styles.description}>{product.description}</Text>
+        <Text style={[styles.description, { color: colors.subtext }]}>
+          {product.description}
+        </Text>
       ) : null}
 
       {/* Cantidad */}
       <View style={styles.qtyRow}>
-        <Button title="-" onPress={() => setQty(q => Math.max(1, q - 1))} />
-        <Text style={styles.qtyText}>Cantidad: {qty}</Text>
-        <Button title="+" onPress={() => setQty(q => q + 1)} />
+        <Button
+          title="-"
+          onPress={() => setQty((q) => Math.max(1, q - 1))}
+          color={colors.primary}
+        />
+        <Text style={[styles.qtyText, { color: colors.text }]}>
+          Cantidad: {qty}
+        </Text>
+        <Button
+          title="+"
+          onPress={() => setQty((q) => q + 1)}
+          color={colors.primary}
+        />
       </View>
 
-      {/* Total calculado*/}
-      <Text style={styles.total}>Total: {money(total)}</Text>
+      {/* Total */}
+      <Text style={[styles.total, { color: colors.text }]}>
+        Total: {money(total)}
+      </Text>
 
-      {/* Boton de compra simulada */}
+      {/* Comprar */}
       <View style={{ marginTop: 8 }}>
         <Button
           title="Comprar"
-          color="#E91E63"
+          color={colors.primary}
           onPress={() =>
             Alert.alert(
               "Compra simulada",
-              `Has comprado ${qty} × ${product.name} por $${total.toLocaleString()}`
+              `Has comprado ${qty} × ${product.name} por ${money(total)}`
             )
           }
         />
@@ -63,29 +83,22 @@ export default function ProductDetailScreen({ route }) {
   );
 }
 
-
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fafafa", padding: 16 },
+  container: { flex: 1, padding: 16 },
 
-  // Imagen principal del detalle (hero)
   heroImage: {
     width: "100%",
     height: 260,
     borderRadius: 16,
-    marginTop: 75,        // espacio para el NavBar fijo
+    marginTop: 75,
     marginBottom: 16,
     resizeMode: "cover",
   },
 
-  title: { fontSize: 22, fontWeight: "bold", color: "#333", marginBottom: 6 },
-  price: { fontSize: 16, color: "#444", marginBottom: 12 },
+  title: { fontSize: 22, fontWeight: "bold", marginBottom: 6 },
+  price: { fontSize: 16, marginBottom: 12 },
 
-  description: {
-    fontSize: 16,
-    color: "#555",
-    lineHeight: 22,
-    marginBottom: 16,
-  },
+  description: { fontSize: 16, lineHeight: 22, marginBottom: 16 },
 
   qtyRow: {
     flexDirection: "row",
@@ -94,8 +107,5 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   qtyText: { fontSize: 18, fontWeight: "600" },
-
-  total: { fontSize: 18, fontWeight: "bold", marginBottom: 16, color: "#000" },
+  total: { fontSize: 18, fontWeight: "bold", marginBottom: 16 },
 });
-
-
