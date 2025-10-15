@@ -38,7 +38,7 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.content}>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: colors.primary }]}
-          onPress={() => navigation.navigate("ProductList")}
+          onPress={() => navigation.navigate("Principal")}
         >
           <Text style={styles.buttonText}>Continuar</Text>
         </TouchableOpacity>

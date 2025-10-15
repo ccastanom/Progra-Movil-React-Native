@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
 import { useNavigation } from "@react-navigation/native";
-
+import { StatusBar, Platform } from "react-native";
 export default function NavBar({ showBack = false, hideMenu = false }) {
   const navigation = useNavigation();
 
@@ -14,23 +14,11 @@ export default function NavBar({ showBack = false, hideMenu = false }) {
 
       <Text style={styles.brand}>QUE ROLLO</Text>
 
-      {showBack ? (
-        <>
+      {showBack && (
+
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={styles.menuIcon}>←</Text>
-          </TouchableOpacity>
-        </>
-      ) : hideMenu ? (
-        <>
-          <View style={{ width: 28 }} />
-        </>
-      ) : (
-        <>
-          <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
-            <Text style={styles.menuIcon}>☰</Text>
-          </TouchableOpacity>
-        </>
-      )}
+          </TouchableOpacity>)}
     </View>
   );
 }
@@ -60,5 +48,3 @@ const styles = StyleSheet.create({
   },
   menuIcon: { fontSize: 28, color: "#E91E63" },
 });
-
-

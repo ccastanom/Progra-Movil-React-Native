@@ -2,14 +2,12 @@ import { StatusBar } from "react-native";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useUi } from "../context/UiContext";
-
 // Pantallas
-import SettingsScreen from "../screens/SettingsScreen";
 import LoginScreen from "../screens/LoginScreen";
-import ProductListScreen from "../screens/ProductListScreen";
 import ProductDetailScreen from "../screens/ProductDetailScreen";
-
+import MyTabs from "./MyTabs";
 const Stack = createNativeStackNavigator();
+
 
 export default function MainNavigator() {
   const { theme } = useUi();
@@ -24,28 +22,25 @@ export default function MainNavigator() {
       />
 
       <NavigationContainer theme={MyTheme}>
+        
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Login"
             component={LoginScreen}
-            options={{ title: "Inicio de sesión" }}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="ProductList"
-            component={ProductListScreen}
-            options={{ title: "Productos" }}
+            name="Principal"
+            component={MyTabs}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="ProductDetail"
             component={ProductDetailScreen}
-            options={{ title: "Detalle del producto" }}
-          />
-          <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{ title: "Ajustes" }}
+            options={{headerShown: false}}
           />
         </Stack.Navigator>
+        
       </NavigationContainer>
     </>
   );
