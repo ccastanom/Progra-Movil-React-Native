@@ -11,13 +11,20 @@ import {
 import NavBar from "../components/NavBar";
 import { money } from "../utils/format";
 import useThemeColors from "../styles/themes";
+import { useCart } from "../context/CartContext";
 
 export default function ProductDetailScreen({ route }) {
   const { colors } = useThemeColors();
   const { product } = route.params;
   const [qty, setQty] = useState(1);
-
+  const { addToCart } = useCart();
   const total = product.price * qty;
+
+  // ✅ Definimos la función que faltaba
+  const handleAddToCart = () => {
+    addToCart(product, qty);
+    Alert.alert("Éxito", `${product.name} fue agregado al carrito 🛒`);
+  };
 
   return (
     <ScrollView
@@ -69,14 +76,9 @@ export default function ProductDetailScreen({ route }) {
       {/* Comprar */}
       <View style={{ marginTop: 8 }}>
         <Button
-          title="Comprar"
+          title="Agregar al carrito"
           color={colors.primary}
-          onPress={() =>
-            Alert.alert(
-              "Compra simulada",
-              `Has comprado ${qty} × ${product.name} por ${money(total)}`
-            )
-          }
+          onPress={handleAddToCart}
         />
       </View>
     </ScrollView>
