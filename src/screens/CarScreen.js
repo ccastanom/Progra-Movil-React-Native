@@ -5,10 +5,8 @@ import { money } from "../utils/format";
 export default function Car() {
   const { cartItems, removeFromCart, clearCart } = useCart();
 
-  // ✅ Calcular total general
   const total = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-  // ✅ Función para simular la compra
   const handlePurchase = () => {
     Alert.alert(
       "Compra realizada 🎉",
@@ -53,7 +51,6 @@ export default function Car() {
         )}
       />
 
-      {/* ✅ Total y botones de acción */}
       <View style={styles.footer}>
         <Text style={styles.totalText}>Total: {money(total)}</Text>
         <Button title="Comprar" color="#4CAF50" onPress={handlePurchase} />

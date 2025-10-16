@@ -14,7 +14,7 @@ import { PRODUCTS } from "../utils/products";
 import { useUi } from "../context/UiContext";
 
 export default function ProductListScreen({ navigation }) {
-  const { theme } = useUi();
+  const { theme, fontScale } = useUi();
   const dark = theme === "dark";
 
   const [q, setQ] = useState("");
@@ -32,22 +32,22 @@ export default function ProductListScreen({ navigation }) {
         styles.card,
         {
           backgroundColor: dark ? "#1E1E1E" : "#fff",
-          borderColor: dark ? "#333" : "#e3e3e3",
+          borderColor: dark ? "#333" : "#e3e3e3"
         },
       ]}
     >
       <Image source={item.image} style={styles.thumb} />
       <View style={{ flex: 1 }}>
-        <Text style={[styles.cardTitle, { color: dark ? "#fff" : "#333" }]}>
+        <Text style={[styles.cardTitle, { color: dark ? "#fff" : "#333", fontSize: 14 * fontScale}]}>
           {item.name}
         </Text>
-        <Text style={[styles.cardPrice, { color: dark ? "#ccc" : "#444" }]}>
+        <Text style={[styles.cardPrice, { color: dark ? "#ccc" : "#444", fontSize: 14 * fontScale }]}>
           ${item.price.toLocaleString()}
         </Text>
         <Text
           style={[
             styles.cardLink,
-            { color: dark ? "#FF4081" : "#E91E63" },
+            { color: dark ? "#FF4081" : "#E91E63", fontSize: 14 * fontScale },
           ]}
         >
           Ver detalle
@@ -75,7 +75,7 @@ export default function ProductListScreen({ navigation }) {
         <Text
           style={[
             styles.headerTitle,
-            { color: dark ? "#fff" : "#fff" },
+            { color: dark ? "#fff" : "#fff", fontSize: 30 * fontScale },
           ]}
         >
           Productos
@@ -114,7 +114,7 @@ export default function ProductListScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   headerImage: { height: 160, justifyContent: "flex-end" },
-  headerTitle: { fontSize: 28, fontWeight: "800", padding: 16 },
+  headerTitle: { fontWeight: "800", padding: 16 },
   content: { flex: 1, padding: 16, gap: 12 },
   search: {
     borderWidth: 1,
