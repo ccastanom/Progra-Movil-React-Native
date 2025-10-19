@@ -96,10 +96,10 @@ export default function RecommendedProducts({ navigation }) {
       {/* Lista de productos en cuadrícula */}
       <FlatList
   data={recommended}
-  key={"grid"} // 🔹 clave fija para evitar el bug de numColumns
+  key={"grid"}
   keyExtractor={(item) => item.id.toString()}
   renderItem={renderItem}
-  numColumns={2} // o 3 si prefieres
+  numColumns={2} 
   contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
   columnWrapperStyle={{ justifyContent: "space-between" }}
   showsVerticalScrollIndicator={false}

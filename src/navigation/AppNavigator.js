@@ -37,7 +37,7 @@ export default function MainNavigator() {
           <Stack.Screen
             name="ProductDetail"
             component={ProductDetailScreen}
-            options={{headerShown: false}}
+            options={{ headerBackButtonDisplayMode: "none", title: "" }}
           />
         </Stack.Navigator>
         
