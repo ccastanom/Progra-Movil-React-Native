@@ -24,7 +24,7 @@ function MyTabs() {
       <Tab.Screen name="ProductList" 
       component={ProductListScreen} 
       options={{ headerShown: false, 
-        tabBarLabel: 'Productos',
+        tabBarLabel: 'Inicio',
         tabBarIcon: ({ color }) => (<MaterialCommunityIcons name="home" size={30} color={color} />),
       }}/>
 
