@@ -1,26 +1,29 @@
-import { View, Text, StyleSheet, FlatList, Button, Image, Alert } from "react-native";
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Car() {
   const { cartItems, removeFromCart, clearCart } = useCart();
+  const navigation = useNavigation();
 
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
-
-  const handlePurchase = () => {
-    Alert.alert(
-      "Compra realizada 🎉",
-      `Gracias por tu compra. El total fue de ${money(total)}.`,
-      [
-        { text: "Aceptar", onPress: () => clearCart() }
-      ]
-    );
-  };
+  const total = cartItems.reduce(
+    (acc, item) => acc + Number(item.price) * (item.quantity || 1),
+    0
+  );
 
   if (cartItems.length === 0) {
     return (
-      <View style={styles.empty}>
-        <Text style={styles.emptyText}>🛒 Tu carrito está vacío</Text>
+      <View style={styles.container}>
+        <Text style={styles.empty}>Tu carrito está vacío 🛒</Text>
       </View>
     );
   }
@@ -33,30 +36,41 @@ export default function Car() {
         renderItem={({ item }) => (
           <View style={styles.item}>
             <Image source={item.image} style={styles.image} />
-            <View style={{ flex: 1 }}>
+
+            <View style={styles.info}>
               <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>
-                {money(item.price)} × {item.qty}
+              <Text style={styles.price}>Precio: {money(item.price)}</Text>
+              <Text style={styles.quantity}>
+                Cantidad: {item.quantity || 1}
               </Text>
               <Text style={styles.subtotal}>
-                Subtotal: {money(item.price * item.qty)}
+                Subtotal: {money(item.price * (item.quantity || 1))}
               </Text>
-              <Button
-                title="Eliminar"
-                color="#E91E63"
-                onPress={() => removeFromCart(item.id)}
-              />
+
+              <TouchableOpacity onPress={() => removeFromCart(item.id)}>
+                <Text style={styles.remove}>Eliminar</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
       />
 
-      <View style={styles.footer}>
-        <Text style={styles.totalText}>Total: {money(total)}</Text>
-        <Button title="Comprar" color="#4CAF50" onPress={handlePurchase} />
-        <View style={{ marginTop: 8 }}>
-          <Button title="Vaciar carrito" color="#E91E63" onPress={clearCart} />
-        </View>
+      <View style={styles.totalContainer}>
+        <Text style={styles.totalText}>Total a pagar: {money(total)}</Text>
+
+        <TouchableOpacity
+          style={styles.buyButton}
+          onPress={() => navigation.navigate("Checkout", { total })}
+        >
+          <Text style={styles.buyText}>Finalizar compra</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.clearButton}
+          onPress={clearCart}
+        >
+          <Text style={styles.clearText}>Vaciar carrito</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -66,30 +80,36 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
   item: {
     flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-    backgroundColor: "#fff",
-    borderRadius: 12,
+    backgroundColor: "#222",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  image: { width: 60, height: 60, borderRadius: 10 },
+  info: { flex: 1, marginLeft: 10 },
+  name: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  price: { color: "#ccc", marginTop: 4 },
+  quantity: { color: "#ccc", marginTop: 2 },
+  subtotal: { color: "#fff", marginTop: 4, fontWeight: "bold" },
+  remove: { color: "#ff4d4d", marginTop: 8 },
+  empty: { color: "#ccc", textAlign: "center", marginTop: 50, fontSize: 18 },
+  totalContainer: { marginTop: 20, alignItems: "center" },
+  totalText: { color: "#fff", fontSize: 22, marginBottom: 10 },
+  buyButton: {
+    backgroundColor: "#1e90ff",
     padding: 12,
-    elevation: 2,
+    borderRadius: 10,
+    width: "80%",
+    alignItems: "center",
+    marginBottom: 10,
   },
-  image: { width: 80, height: 80, borderRadius: 12, marginRight: 12 },
-  name: { fontSize: 16, fontWeight: "bold" },
-  price: { color: "#555" },
-  subtotal: { fontWeight: "600", marginVertical: 4 },
-  empty: { flex: 1, justifyContent: "center", alignItems: "center" },
-  emptyText: { fontSize: 20, color: "#999" },
-  footer: {
-    marginTop: 12,
-    padding: 16,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    elevation: 3,
+  buyText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  clearButton: {
+    backgroundColor: "#444",
+    padding: 10,
+    borderRadius: 10,
+    width: "80%",
+    alignItems: "center",
   },
-  totalText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 12,
-    textAlign: "center",
-  },
+  clearText: { color: "#fff", fontSize: 15 },
 });
