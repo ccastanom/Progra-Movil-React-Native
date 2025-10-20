@@ -1,5 +1,9 @@
 import { StatusBar } from "react-native";
-import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useUi } from "../context/UiContext";
 // Pantallas
@@ -7,7 +11,6 @@ import LoginScreen from "../screens/LoginScreen";
 import ProductDetailScreen from "../screens/ProductDetailScreen";
 import MyTabs from "./MyTabs";
 const Stack = createNativeStackNavigator();
-
 
 export default function MainNavigator() {
   const { theme } = useUi();
@@ -22,7 +25,6 @@ export default function MainNavigator() {
       />
 
       <NavigationContainer theme={MyTheme}>
-        
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Login"
@@ -37,10 +39,12 @@ export default function MainNavigator() {
           <Stack.Screen
             name="ProductDetail"
             component={ProductDetailScreen}
-            options={{ headerBackButtonDisplayMode: "none", title: "" }}
+            options={{
+              headerBackButtonDisplayMode: "minimal",
+              title: "Product Details",
+            }}
           />
         </Stack.Navigator>
-        
       </NavigationContainer>
     </>
   );
