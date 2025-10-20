@@ -1,23 +1,25 @@
-// src/context/CartContext.js
 import React, { createContext, useContext, useState } from "react";
 
 const CartContext = createContext();
 
-export function CartProvider({ children }) {
+export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (product, qty = 1) => {
+  const addToCart = (product, quantity = 1) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
+
       if (existing) {
-        // Si ya existe, solo incrementa la cantidad
+        // 🔁 Si ya existe, actualiza la cantidad
         return prev.map((item) =>
           item.id === product.id
-            ? { ...item, qty: item.qty + qty }
+            ? { ...item, quantity: item.quantity + quantity }
             : item
         );
+      } else {
+        // 🆕 Si no existe, lo agrega con cantidad inicial
+        return [...prev, { ...product, quantity }];
       }
-      return [...prev, { ...product, qty }];
     });
   };
 
@@ -25,15 +27,17 @@ export function CartProvider({ children }) {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const clearCart = () => setCartItems([]);
+  const clearCart = () => {
+    setCartItems([]);
+  };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, clearCart }}
+    >
       {children}
     </CartContext.Provider>
   );
-}
+};
 
-export function useCart() {
-  return useContext(CartContext);
-}
+export const useCart = () => useContext(CartContext);

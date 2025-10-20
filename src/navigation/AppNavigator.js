@@ -10,6 +10,8 @@ import { useUi } from "../context/UiContext";
 import LoginScreen from "../screens/LoginScreen";
 import ProductDetailScreen from "../screens/ProductDetailScreen";
 import MyTabs from "./MyTabs";
+import CheckoutScreen from "../screens/CheckoutScreen";
+import PaymentScreen from "../screens/PaymentScreen";
 const Stack = createNativeStackNavigator();
 
 export default function MainNavigator() {
@@ -44,6 +46,14 @@ export default function MainNavigator() {
               title: "Product Details",
             }}
           />
+          <Stack.Screen name="Checkout" 
+          component={CheckoutScreen} 
+          options={{ title: "Finalizar compra" }} 
+          />
+          <Stack.Screen name="Payment" 
+          component={PaymentScreen} 
+          options={{ title: "Pago" }} />
+
         </Stack.Navigator>
       </NavigationContainer>
     </>
