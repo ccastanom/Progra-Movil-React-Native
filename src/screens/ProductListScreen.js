@@ -73,6 +73,7 @@ export default function RecommendedProducts({ navigation }) {
       style={{
         flex: 1,
         backgroundColor: dark ? "#121212" : "#fafafa",
+        marginTop: 40,
       }}
     >
       <NavBar />
@@ -95,16 +96,15 @@ export default function RecommendedProducts({ navigation }) {
 
       {/* Lista de productos en cuadrícula */}
       <FlatList
-  data={recommended}
-  key={"grid"}
-  keyExtractor={(item) => item.id.toString()}
-  renderItem={renderItem}
-  numColumns={2} 
-  contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
-  columnWrapperStyle={{ justifyContent: "space-between" }}
-  showsVerticalScrollIndicator={false}
-/>
-
+        data={recommended}
+        key={"grid"}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderItem}
+        numColumns={2}
+        contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
