@@ -42,18 +42,19 @@ export default function MainNavigator() {
             name="ProductDetail"
             component={ProductDetailScreen}
             options={{
-              headerBackButtonDisplayMode: "minimal",
-              title: "Product Details",
+              headerShown: false,
             }}
           />
-          <Stack.Screen name="Checkout" 
-          component={CheckoutScreen} 
-          options={{ title: "Finalizar compra" }} 
+          <Stack.Screen
+            name="Checkout"
+            component={CheckoutScreen}
+            options={{ title: "Finalizar compra" }}
           />
-          <Stack.Screen name="Payment" 
-          component={PaymentScreen} 
-          options={{ title: "Pago" }} />
-
+          <Stack.Screen
+            name="Payment"
+            component={PaymentScreen}
+            options={{ title: "Pago" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

@@ -29,17 +29,15 @@ export default function ProductDetailScreen({ route }) {
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.bg }]}
-      contentContainerStyle={{ paddingBottom: 24 }}
+      contentContainerStyle={{ paddingBottom: 24, marginTop: 24 }}
     >
-      <NavBar />
+      <NavBar showBack={true} />
 
       {/* Imagen del producto */}
       <Image source={product.image} style={styles.heroImage} />
 
       {/* Nombre y precio */}
-      <Text style={[styles.title, { color: colors.text }]}>
-        {product.name}
-      </Text>
+      <Text style={[styles.title, { color: colors.text }]}>{product.name}</Text>
       <Text style={[styles.price, { color: colors.subtext }]}>
         Precio: {money(product.price)}
       </Text>

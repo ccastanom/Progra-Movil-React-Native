@@ -7,18 +7,17 @@ export default function NavBar({ showBack = false, hideMenu = false }) {
 
   return (
     <View style={styles.navBar}>
+      {showBack && (
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.menuIcon}>←</Text>
+        </TouchableOpacity>
+      )}
+
+      <Text style={styles.brand}>QUE ROLLO</Text>
 
       <View style={styles.logoWrap}>
         <SvgIcon width={40} height={40} />
       </View>
-
-      <Text style={styles.brand}>QUE ROLLO</Text>
-
-      {showBack && (
-
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={styles.menuIcon}>←</Text>
-          </TouchableOpacity>)}
     </View>
   );
 }
@@ -28,6 +27,7 @@ const styles = StyleSheet.create({
   navBar: {
     height: 75,
     backgroundColor: "#ffffffcc",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
