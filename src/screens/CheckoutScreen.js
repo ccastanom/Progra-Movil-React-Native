@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
-
+import { useUi } from "../context/UiContext";
 export default function CheckoutScreen({ route, navigation }) {
-  const { total } = route.params; // 👈 recibe el total
+  const { theme, fontScale } = useUi();
+  const dark = theme === "dark";
+  const { total } = route.params; 
   const [accepted, setAccepted] = useState(false);
 
   const handleContinue = () => {

@@ -12,6 +12,7 @@ import ProductDetailScreen from "../screens/ProductDetailScreen";
 import MyTabs from "./MyTabs";
 import CheckoutScreen from "../screens/CheckoutScreen";
 import PaymentScreen from "../screens/PaymentScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 const Stack = createNativeStackNavigator();
 
 export default function MainNavigator() {
@@ -54,6 +55,11 @@ export default function MainNavigator() {
             name="Payment"
             component={PaymentScreen}
             options={{ title: "Pago" }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{ title: "Crear cuenta" }}
           />
         </Stack.Navigator>
       </NavigationContainer>
