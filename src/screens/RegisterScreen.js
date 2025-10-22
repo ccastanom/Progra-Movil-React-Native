@@ -16,7 +16,7 @@ import { app, db } from "../firebase/config";
 import { doc, setDoc } from "firebase/firestore";
 
 export default function RegisterScreen({ navigation }) {
-  const { colors } = useThemeColors();
+  const { colors, isDark } = useThemeColors();
   const auth = getAuth(app);
 
   const [name, setName] = useState("");
@@ -87,15 +87,29 @@ export default function RegisterScreen({ navigation }) {
       <View style={styles.content}>
         <TextInput
           placeholder="Nombre completo"
-          placeholderTextColor="#aaa"
-          style={[styles.input, { borderColor: colors.primary, color: colors.text }]}
+          placeholderTextColor={isDark ? "#aaa" : "#666"}
+          style={[
+            styles.input,
+            {
+              borderColor: colors.primary,
+              color: colors.text,
+              backgroundColor: isDark ? "#1e1e1e" : "rgba(255,255,255,0.9)",
+            },
+          ]}
           value={name}
           onChangeText={setName}
         />
         <TextInput
           placeholder="Correo electrónico"
-          placeholderTextColor="#aaa"
-          style={[styles.input, { borderColor: colors.primary, color: colors.text }]}
+          placeholderTextColor={isDark ? "#aaa" : "#666"}
+          style={[
+            styles.input,
+            {
+              borderColor: colors.primary,
+              color: colors.text,
+              backgroundColor: isDark ? "#1e1e1e" : "rgba(255,255,255,0.9)",
+            },
+          ]}
           keyboardType="email-address"
           autoCapitalize="none"
           value={email}
@@ -103,8 +117,15 @@ export default function RegisterScreen({ navigation }) {
         />
         <TextInput
           placeholder="Contraseña"
-          placeholderTextColor="#aaa"
-          style={[styles.input, { borderColor: colors.primary, color: colors.text }]}
+          placeholderTextColor={isDark ? "#aaa" : "#666"}
+          style={[
+            styles.input,
+            {
+              borderColor: colors.primary,
+              color: colors.text,
+              backgroundColor: isDark ? "#1e1e1e" : "rgba(255,255,255,0.9)",
+            },
+          ]}
           secureTextEntry
           value={password}
           onChangeText={setPassword}
@@ -163,7 +184,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     marginBottom: 12,
-    backgroundColor: "rgba(255,255,255,0.9)",
   },
   button: {
     paddingVertical: 14,
@@ -176,7 +196,6 @@ const styles = StyleSheet.create({
   imgEnd: { opacity: 0.5, marginTop: 20 },
   navBar: {
     height: 75,
-    backgroundColor: "#ffffffcc",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -188,5 +207,5 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   logoWrap: { justifyContent: "center", alignItems: "center" },
-  brand: { fontSize: 18, fontWeight: "800", color: "#E91E63" },
+  brand: { fontSize: 18, fontWeight: "800" },
 });

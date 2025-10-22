@@ -32,13 +32,25 @@ export default function LoginScreen({ navigation }) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert("Bienvenido", "Inicio de sesión exitoso 🎉");
-      navigation.replace("Principal"); // Evita volver atrás
+      navigation.replace("Principal");
     } catch (error) {
-      console.error(error);
+      console.error("Error al iniciar sesión:", error);
       let message = "Ocurrió un error al iniciar sesión";
-      if (error.code === "auth/user-not-found") message = "Usuario no registrado";
-      if (error.code === "auth/wrong-password") message = "Contraseña incorrecta";
-      if (error.code === "auth/invalid-email") message = "Correo inválido";
+
+      // 🔹 Manejo de errores detallado
+      if (error.code === "auth/user-not-found") {
+        message = "Usuario no registrado";
+      } else if (
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/invalid-credential"
+      ) {
+        message = "Contraseña incorrecta";
+      } else if (error.code === "auth/invalid-email") {
+        message = "Correo inválido";
+      } else if (error.code === "auth/network-request-failed") {
+        message = "Error de conexión. Revisa tu internet.";
+      }
+
       Alert.alert("Error", message);
     } finally {
       setLoading(false);
@@ -72,22 +84,38 @@ export default function LoginScreen({ navigation }) {
       {/* Formulario */}
       <View style={styles.content}>
         <TextInput
-          placeholder="Correo electrónico"
-          placeholderTextColor="#aaa"
-          style={[styles.input, { borderColor: colors.primary, color: colors.text }]}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          placeholder="Contraseña"
-          placeholderTextColor="#aaa"
-          style={[styles.input, { borderColor: colors.primary, color: colors.text }]}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+  placeholder="Correo electrónico"
+  placeholderTextColor={colors.subtext}
+  style={[
+    styles.input,
+    {
+      borderColor: colors.primary,
+      color: colors.text,
+      backgroundColor: colors.card, // 👈 se adapta al tema
+    },
+  ]}
+  keyboardType="email-address"
+  autoCapitalize="none"
+  value={email}
+  onChangeText={setEmail}
+/>
+
+<TextInput
+  placeholder="Contraseña"
+  placeholderTextColor={colors.subtext}
+  style={[
+    styles.input,
+    {
+      borderColor: colors.primary,
+      color: colors.text,
+      backgroundColor: colors.card, 
+    },
+  ]}
+  secureTextEntry
+  value={password}
+  onChangeText={setPassword}
+/>
+
 
         <TouchableOpacity
           style={[styles.button, { backgroundColor: colors.primary }]}
