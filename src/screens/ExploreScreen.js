@@ -67,7 +67,7 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: dark ? "#121212" : "#fafafa" }}>
-      {/* <NavBar /> */}
+      <NavBar showBack={true} />
 
       {/* Campo de búsqueda arriba */}
       <View style={styles.searchContainer}>
@@ -104,7 +104,11 @@ export default function SearchScreen({ navigation }) {
         data={filtered}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        contentContainerStyle={{ padding: 16, paddingTop: 0, paddingBottom: 60 }}
+        contentContainerStyle={{
+          padding: 16,
+          paddingTop: 0,
+          paddingBottom: 60,
+        }}
         ItemSeparatorComponent={() => <View style={{ height: 14 }} />}
         ListEmptyComponent={
           <Text
@@ -126,6 +130,7 @@ export default function SearchScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   searchContainer: {
+    marginTop: 64,
     paddingHorizontal: 16,
     paddingVertical: 14,
   },
