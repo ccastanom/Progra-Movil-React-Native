@@ -12,11 +12,16 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 
+// Firebase
+import { db } from "../firebase/config";
+import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+
 export default function PaymentScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const { total } = route.params;
-  const { clearCart } = useCart();
+  const { clearCart, cartItems } = useCart();
 
   const [name, setName] = useState("");
   const [card, setCard] = useState("");
@@ -24,8 +29,9 @@ export default function PaymentScreen() {
   const [cvv, setCvv] = useState("");
   const [address, setAddress] = useState("");
   const [terms, setTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!name || !card || !expiry || !cvv || !address) {
       Alert.alert("Campos incompletos", "Por favor completa todos los campos.");
       return;
@@ -36,21 +42,54 @@ export default function PaymentScreen() {
     }
 
     Alert.alert("Procesando pago...", "Por favor espera unos segundos.");
+    setLoading(true);
 
-    setTimeout(() => {
-      Alert.alert("Pago exitoso 🎉", "Tu compra se ha completado con éxito.", [
-        {
-          text: "Aceptar",
-          onPress: () => {
-            clearCart();
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "Principal" }],
-            });
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        setLoading(false);
+        Alert.alert("Sesión requerida", "Debes iniciar sesión para pagar.");
+        return;
+      }
+
+      // Crear referencia a la subcolección de compras del usuario
+      const userRef = doc(db, "users", user.uid);
+      const purchasesRef = collection(userRef, "purchases");
+
+      await addDoc(purchasesRef, {
+        name,
+        address,
+        total,
+        items: cartItems.map((item) => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        createdAt: serverTimestamp(),
+      });
+
+      setTimeout(() => {
+        setLoading(false);
+        Alert.alert("Pago exitoso 🎉", "Tu compra se ha completado con éxito.", [
+          {
+            text: "Aceptar",
+            onPress: () => {
+              clearCart();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Principal" }],
+              });
+            },
           },
-        },
-      ]);
-    }, 1200);
+        ]);
+      }, 1000);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error al registrar la compra:", error);
+      Alert.alert("Error", "Hubo un problema al procesar el pago.");
+    }
   };
 
   return (
@@ -131,8 +170,14 @@ export default function PaymentScreen() {
 
       <Text style={styles.total}>Total a pagar: {money(total)}</Text>
 
-      <TouchableOpacity style={styles.button} onPress={handlePayment}>
-        <Text style={styles.buttonText}>Confirmar pago</Text>
+      <TouchableOpacity
+        style={[styles.button, loading && { backgroundColor: "#555" }]}
+        onPress={handlePayment}
+        disabled={loading}
+      >
+        <Text style={styles.buttonText}>
+          {loading ? "Procesando..." : "Confirmar pago"}
+        </Text>
       </TouchableOpacity>
     </ScrollView>
   );

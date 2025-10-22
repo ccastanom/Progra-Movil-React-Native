@@ -16,7 +16,7 @@ export default function useThemeColors() {
     : {
         bg: "#ffffff",
         card: "#f7f7f7",
-        text: "#222222",
+        text: "#020202ff",
         subtext: "#666666",
         border: "#dddddd",
         primary: "#E91E63",

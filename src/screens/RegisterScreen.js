@@ -4,41 +4,57 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ImageBackground,
   TextInput,
+  ImageBackground,
   Alert,
   ActivityIndicator,
 } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
 import useThemeColors from "../styles/themes";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../firebase/config";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { app, db } from "../firebase/config";
+import { doc, setDoc } from "firebase/firestore";
 
-export default function LoginScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
   const { colors } = useThemeColors();
   const auth = getAuth(app);
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Por favor ingresa tu correo y contraseña");
+  const handleRegister = async () => {
+    if (!name || !email || !password) {
+      Alert.alert("Error", "Por favor completa todos los campos");
       return;
     }
 
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("Bienvenido", "Inicio de sesión exitoso 🎉");
-      navigation.replace("Principal"); // Evita volver atrás
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await updateProfile(user, { displayName: name });
+
+      // Guardar datos en Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        createdAt: new Date(),
+      });
+
+      Alert.alert("Éxito 🎉", "Tu cuenta ha sido creada con éxito");
+      navigation.replace("Principal");
     } catch (error) {
       console.error(error);
-      let message = "Ocurrió un error al iniciar sesión";
-      if (error.code === "auth/user-not-found") message = "Usuario no registrado";
-      if (error.code === "auth/wrong-password") message = "Contraseña incorrecta";
-      if (error.code === "auth/invalid-email") message = "Correo inválido";
+      let message = "Ocurrió un error al registrar";
+      if (error.code === "auth/email-already-in-use")
+        message = "El correo ya está registrado";
+      if (error.code === "auth/invalid-email")
+        message = "Correo inválido";
+      if (error.code === "auth/weak-password")
+        message = "La contraseña es muy débil";
       Alert.alert("Error", message);
     } finally {
       setLoading(false);
@@ -52,7 +68,7 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.logoWrap}>
           <SvgIcon width={40} height={40} />
         </View>
-        <Text style={[styles.brand, { color: colors.text }]}>QUE ROLLO</Text>
+        <Text style={[styles.brand, { color: colors.text }]}>REGISTRO</Text>
         <View style={{ width: 28 }} />
       </View>
 
@@ -63,14 +79,19 @@ export default function LoginScreen({ navigation }) {
         imageStyle={{ resizeMode: "cover" }}
       >
         <View style={styles.headerTextWrap}>
-          <Text style={styles.headerText}>
-            El rollo perfecto para cada antojo 😋
-          </Text>
+          <Text style={styles.headerText}>Crea tu cuenta y empieza a disfrutar 😋</Text>
         </View>
       </ImageBackground>
 
       {/* Formulario */}
       <View style={styles.content}>
+        <TextInput
+          placeholder="Nombre completo"
+          placeholderTextColor="#aaa"
+          style={[styles.input, { borderColor: colors.primary, color: colors.text }]}
+          value={name}
+          onChangeText={setName}
+        />
         <TextInput
           placeholder="Correo electrónico"
           placeholderTextColor="#aaa"
@@ -91,25 +112,20 @@ export default function LoginScreen({ navigation }) {
 
         <TouchableOpacity
           style={[styles.button, { backgroundColor: colors.primary }]}
-          onPress={handleLogin}
+          onPress={handleRegister}
           disabled={loading}
         >
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Iniciar sesión</Text>
+            <Text style={styles.buttonText}>Registrarme</Text>
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Register")}
-          style={{ marginTop: 12 }}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ marginTop: 12 }}>
           <Text style={{ color: colors.text }}>
-            ¿No tienes cuenta?{" "}
-            <Text style={{ color: colors.primary, fontWeight: "bold" }}>
-              Regístrate
-            </Text>
+            ¿Ya tienes cuenta?{" "}
+            <Text style={{ color: colors.primary, fontWeight: "bold" }}>Inicia sesión</Text>
           </Text>
         </TouchableOpacity>
 
@@ -122,10 +138,10 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1 },
   headerImage: {
     width: "105%",
-    height: 400,
+    height: 350,
     justifyContent: "flex-end",
     padding: 20,
   },
@@ -135,7 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   headerText: {
-    fontSize: 26,
+    fontSize: 22,
     color: "#fff",
     fontWeight: "700",
     textAlign: "center",
@@ -151,14 +167,13 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 14,
-    paddingHorizontal: 40,
     borderRadius: 30,
     width: "100%",
     alignItems: "center",
     marginTop: 10,
   },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  imgEnd: { opacity: 0.5, marginTop: 30 },
+  imgEnd: { opacity: 0.5, marginTop: 20 },
   navBar: {
     height: 75,
     backgroundColor: "#ffffffcc",

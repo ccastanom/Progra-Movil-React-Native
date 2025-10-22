@@ -4,6 +4,7 @@ import { UiProvider } from "./src/context/UiContext"; // Context global (tema, t
 import MainNavigator from "./src/navigation/AppNavigator"; // Navegación principal
 import { CartProvider } from "./src/context/CartContext"; // Contexto del carrito de compras
 
+
 const Stack = createNativeStackNavigator(); // Stack nativo
 
 export default function App() {
