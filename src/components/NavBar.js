@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
   navBar: {
     height: 75,
     backgroundColor: "#ffffffcc",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

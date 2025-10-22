@@ -10,6 +10,7 @@ import {
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useNavigation } from "@react-navigation/native";
+import NavBar from "../components/NavBar";
 
 export default function Car() {
   const { cartItems, removeFromCart, clearCart } = useCart();
@@ -30,7 +31,9 @@ export default function Car() {
 
   return (
     <View style={styles.container}>
+      <NavBar showBack={true} />
       <FlatList
+        style={{ marginTop: 80 }}
         data={cartItems}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -65,10 +68,7 @@ export default function Car() {
           <Text style={styles.buyText}>Finalizar compra</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.clearButton}
-          onPress={clearCart}
-        >
+        <TouchableOpacity style={styles.clearButton} onPress={clearCart}>
           <Text style={styles.clearText}>Vaciar carrito</Text>
         </TouchableOpacity>
       </View>
