@@ -29,7 +29,7 @@ export default function ProductDetailScreen({ route }) {
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.bg }]}
-      contentContainerStyle={{ paddingBottom: 24 }}
+      contentContainerStyle={{ paddingBottom: 24, marginTop: 24 }}
     >
       <NavBar showBack={true} />
 

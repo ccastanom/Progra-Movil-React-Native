@@ -73,6 +73,7 @@ export default function RecommendedProducts({ navigation }) {
       style={{
         flex: 1,
         backgroundColor: dark ? "#121212" : "#fafafa",
+        marginTop: 40,
       }}
     >
       <NavBar />
