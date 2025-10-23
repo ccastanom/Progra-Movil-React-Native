@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { useUi } from "../context/UiContext";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useNavigation } from "@react-navigation/native";
@@ -16,6 +17,9 @@ export default function Car() {
   const { cartItems, removeFromCart, clearCart } = useCart();
   const navigation = useNavigation();
 
+  const { theme } = useUi();
+  const dark = theme === "dark";
+
   const total = cartItems.reduce(
     (acc, item) => acc + Number(item.price) * (item.quantity || 1),
     0
@@ -23,21 +27,30 @@ export default function Car() {
 
   if (cartItems.length === 0) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.empty}>Tu carrito está vacío 🛒</Text>
+      <View
+        style={[styles.container, { backgroundColor: dark ? "#000" : "#fff" }]}
+      >
+        <Text style={[styles.empty, { color: dark ? "#ccc" : "333" }]}>
+          Tu carrito está vacío
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { backgroundColor: dark ? "#000" : "#fff" }]}
+    >
       <NavBar showBack={true} />
+
       <FlatList
         style={{ marginTop: 80 }}
         data={cartItems}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.item}>
+          <View
+            style={[styles.item, { backgroundColor: dark ? "#222" : "eee" }]}
+          >
             <Image source={item.image} style={styles.image} />
 
             <View style={styles.info}>
@@ -59,7 +72,9 @@ export default function Car() {
       />
 
       <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>Total a pagar: {money(total)}</Text>
+        <Text style={[styles.totalText, { color: dark ? "#fff" : "#111" }]}>
+          Total a pagar: {money(total)}
+        </Text>
 
         <TouchableOpacity
           style={styles.buyButton}
@@ -96,7 +111,7 @@ const styles = StyleSheet.create({
   totalContainer: { marginTop: 20, alignItems: "center" },
   totalText: { color: "#fff", fontSize: 22, marginBottom: 10 },
   buyButton: {
-    backgroundColor: "#1e90ff",
+    backgroundColor: "#E91E63",
     padding: 12,
     borderRadius: 10,
     width: "80%",
@@ -105,7 +120,7 @@ const styles = StyleSheet.create({
   },
   buyText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
   clearButton: {
-    backgroundColor: "#444",
+    backgroundColor: "#E91E63",
     padding: 10,
     borderRadius: 10,
     width: "80%",
