@@ -22,9 +22,13 @@ export default function ProductDetailScreen({ route }) {
 
   // ✅ Definimos la función que faltaba
   const handleAddToCart = () => {
-    addToCart(product, qty);
-    Alert.alert("Éxito", `${product.name} fue agregado al carrito 🛒`);
-  };
+  const image = product.image || product.imageUrl || ""; // Garantiza que exista algo
+  const productWithImage = { ...product, image }; // Crea una copia segura
+
+  addToCart(productWithImage, qty);
+  Alert.alert("Éxito", `${product.name} fue agregado al carrito 🛒`);
+};
+
 
   return (
     <ScrollView
@@ -34,7 +38,7 @@ export default function ProductDetailScreen({ route }) {
       <NavBar showBack={true} />
 
       {/* Imagen del producto */}
-      <Image source={product.image} style={styles.heroImage} />
+      <Image source={{ uri: product.image || product.imageUrl }} style={styles.heroImage} />
 
       {/* Nombre y precio */}
       <Text style={[styles.title, { color: colors.text }]}>{product.name}</Text>

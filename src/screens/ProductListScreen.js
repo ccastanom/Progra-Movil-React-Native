@@ -8,24 +8,41 @@ import {
   ImageBackground,
   StyleSheet,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/config";
 import NavBar from "../components/NavBar";
-import { PRODUCTS } from "../utils/products";
+import useThemeColors from "../styles/themes";
 import { useUi } from "../context/UiContext";
 
 const { width } = Dimensions.get("window");
-const CARD_WIDTH = width / 2 - 24; // dos tarjetas por fila con márgenes
+const CARD_WIDTH = width / 2 - 24;
 
-export default function RecommendedProducts({ navigation }) {
-  const { theme, fontScale } = useUi();
-  const dark = theme === "dark";
+export default function ProductListScreen({ navigation }) {
+  const { fontScale } = useUi();
+  const { colors } = useThemeColors();
 
-  const [recommended, setRecommended] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mezclar productos al montar
+  // 🔥 Cargar productos desde Firestore
   useEffect(() => {
-    const shuffled = [...PRODUCTS].sort(() => Math.random() - 0.5);
-    setRecommended(shuffled);
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "productos"));
+        const list = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProducts(list);
+      } catch (error) {
+        console.error("Error al cargar productos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
   }, []);
 
   const renderItem = ({ item }) => (
@@ -33,34 +50,45 @@ export default function RecommendedProducts({ navigation }) {
       onPress={() => navigation.navigate("ProductDetail", { product: item })}
       style={[
         styles.card,
-        {
-          backgroundColor: dark ? "#1E1E1E" : "#fff",
-          borderColor: dark ? "#333" : "#e3e3e3",
-        },
+        { backgroundColor: colors.card, borderColor: colors.border },
       ]}
     >
-      <Image source={item.image} style={styles.thumb} />
+      {item.image || item.imageUrl ? (
+        <Image source={{ uri: item.image || item.imageUrl }} style={styles.thumb} />
+      ) : (
+        <View
+          style={[
+            styles.thumb,
+            { backgroundColor: colors.border, justifyContent: "center" },
+          ]}
+        >
+          <Text style={{ color: colors.subtext, textAlign: "center" }}>
+            Sin imagen
+          </Text>
+        </View>
+      )}
+
       <Text
         style={[
           styles.cardTitle,
-          { color: dark ? "#fff" : "#333", fontSize: 14 * fontScale },
+          { color: colors.text, fontSize: 14 * fontScale },
         ]}
         numberOfLines={1}
       >
-        {item.name}
+        {item.name || "Producto"}
       </Text>
       <Text
         style={[
           styles.cardPrice,
-          { color: dark ? "#ccc" : "#444", fontSize: 13 * fontScale },
+          { color: colors.subtext, fontSize: 13 * fontScale },
         ]}
       >
-        ${item.price.toLocaleString()}
+        ${item.price?.toLocaleString() || "0"}
       </Text>
       <Text
         style={[
           styles.cardLink,
-          { color: dark ? "#FF4081" : "#E91E63", fontSize: 13 * fontScale },
+          { color: colors.primary, fontSize: 13 * fontScale },
         ]}
       >
         Ver detalle
@@ -68,20 +96,32 @@ export default function RecommendedProducts({ navigation }) {
     </TouchableOpacity>
   );
 
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.bg,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={{ color: colors.subtext, marginTop: 10 }}>
+          Cargando productos...
+        </Text>
+      </View>
+    );
+  }
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: dark ? "#121212" : "#fafafa",
-      }}
-    >
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <NavBar />
 
-      {/* Encabezado con imagen */}
       <ImageBackground
         source={require("../../assets/fondo.jpeg")}
         style={styles.headerImage}
-        imageStyle={{ resizeMode: "cover", opacity: dark ? 0.4 : 1 }}
+        imageStyle={{ resizeMode: "cover", opacity: 0.4 }}
       >
         <Text
           style={[
@@ -93,11 +133,9 @@ export default function RecommendedProducts({ navigation }) {
         </Text>
       </ImageBackground>
 
-      {/* Lista de productos en cuadrícula */}
       <FlatList
-        data={recommended}
-        key={"grid"}
-        keyExtractor={(item) => item.id.toString()}
+        data={products}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
         numColumns={2}
         contentContainerStyle={{ padding: 16, paddingBottom: 24 }}

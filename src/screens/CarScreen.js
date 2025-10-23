@@ -55,7 +55,23 @@ export default function Car() {
               { backgroundColor: colors.card, borderColor: colors.border },
             ]}
           >
-            <Image source={item.image} style={styles.image} />
+            {/* Imagen */}
+            {item.image ? (
+              <Image
+              source={{ uri: item.image }}
+              style={styles.image}
+              />
+            ) : (
+              <View
+                style={[
+                  styles.image,
+                  { backgroundColor: colors.border, justifyContent: "center", alignItems: "center" },
+                ]}
+                >
+                <Text style={{ color: colors.subtext, fontSize: 12 }}>Sin imagen</Text>
+              </View>
+            )}
+
 
             <View style={styles.info}>
               <Text
