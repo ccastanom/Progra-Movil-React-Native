@@ -6,22 +6,27 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (product, quantity = 1) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+  setCartItems((prev) => {
+    const existing = prev.find((item) => item.id === product.id);
 
-      if (existing) {
-        // 🔁 Si ya existe, actualiza la cantidad
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-      } else {
-        // 🆕 Si no existe, lo agrega con cantidad inicial
-        return [...prev, { ...product, quantity }];
-      }
-    });
-  };
+    if (existing) {
+      return prev.map((item) =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      );
+    } else {
+      // 🧩 Aseguramos que la imagen sea string válida
+      const image =
+        typeof product.image === "string" && product.image.trim() !== ""
+          ? product.image
+          : null;
+
+      return [...prev, { ...product, image, quantity }];
+    }
+  });
+};
+
 
   const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
