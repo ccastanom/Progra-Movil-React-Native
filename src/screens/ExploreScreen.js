@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,22 +7,46 @@ import {
   TextInput,
   Image,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import NavBar from "../components/NavBar";
-import { PRODUCTS } from "../utils/products";
 import { useUi } from "../context/UiContext";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/config"; // 👈 Usa tu archivo real
 
-export default function SearchScreen({ navigation }) {
+export default function ExploreScreen({ navigation }) {
   const { theme, fontScale } = useUi();
   const dark = theme === "dark";
   const [q, setQ] = useState("");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Cargar productos desde Firestore
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "productos"));
+        const items = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProducts(items);
+      } catch (error) {
+        console.error("Error al cargar productos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const filtered = useMemo(() => {
     const t = q.trim().toLowerCase();
-    if (!t) return PRODUCTS;
-    return PRODUCTS.filter((p) => p.name.toLowerCase().includes(t));
-  }, [q]);
+    if (!t) return products;
+    return products.filter((p) => p.name?.toLowerCase().includes(t));
+  }, [q, products]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -35,7 +59,14 @@ export default function SearchScreen({ navigation }) {
         },
       ]}
     >
-      <Image source={item.image} style={styles.thumb} />
+      <Image
+        source={
+          item.imageUrl
+            ? { uri: item.imageUrl }
+            : require("../../assets/no-image.png")
+        }
+        style={styles.thumb}
+      />
       <View style={{ flex: 1 }}>
         <Text
           style={[
@@ -51,7 +82,7 @@ export default function SearchScreen({ navigation }) {
             { color: dark ? "#bbb" : "#444", fontSize: 13 * fontScale },
           ]}
         >
-          ${item.price.toLocaleString()}
+          ${item.price?.toLocaleString() || 0}
         </Text>
         <Text
           style={[
@@ -65,11 +96,29 @@ export default function SearchScreen({ navigation }) {
     </TouchableOpacity>
   );
 
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: dark ? "#121212" : "#fafafa",
+        }}
+      >
+        <ActivityIndicator size="large" color="#E91E63" />
+        <Text style={{ color: dark ? "#999" : "#555", marginTop: 8 }}>
+          Cargando productos...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: dark ? "#121212" : "#fafafa" }}>
       <NavBar showBack={true} />
 
-      {/* Campo de búsqueda arriba */}
+      {/* Campo de búsqueda */}
       <View style={styles.searchContainer}>
         <View
           style={[
@@ -102,7 +151,7 @@ export default function SearchScreen({ navigation }) {
       {/* Lista de productos */}
       <FlatList
         data={filtered}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={{
           padding: 16,
@@ -129,11 +178,7 @@ export default function SearchScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  searchContainer: {
-    marginTop: 64,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
+  searchContainer: { marginTop: 64, paddingHorizontal: 16, paddingVertical: 14 },
   searchBox: {
     flexDirection: "row",
     alignItems: "center",
@@ -147,10 +192,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  searchInput: {
-    flex: 1,
-    fontWeight: "500",
-  },
+  searchInput: { flex: 1, fontWeight: "500" },
   card: {
     flexDirection: "row",
     alignItems: "center",
@@ -164,21 +206,8 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
-  thumb: {
-    width: 70,
-    height: 70,
-    borderRadius: 12,
-    resizeMode: "cover",
-  },
-  cardTitle: {
-    fontWeight: "700",
-  },
-  cardPrice: {
-    marginTop: 4,
-  },
-  cardLink: {
-    marginTop: 6,
-    textDecorationLine: "underline",
-    fontWeight: "600",
-  },
+  thumb: { width: 70, height: 70, borderRadius: 12, resizeMode: "cover" },
+  cardTitle: { fontWeight: "700" },
+  cardPrice: { marginTop: 4 },
+  cardLink: { marginTop: 6, textDecorationLine: "underline", fontWeight: "600" },
 });
