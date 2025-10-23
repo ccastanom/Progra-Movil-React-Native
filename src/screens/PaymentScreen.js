@@ -11,6 +11,8 @@ import {
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
+import { useUi } from "../context/UiContext";
+import useThemeColors from "../styles/themes";
 
 // Firebase
 import { db } from "../firebase/config";
@@ -22,6 +24,9 @@ export default function PaymentScreen() {
   const route = useRoute();
   const { total } = route.params;
   const { clearCart, cartItems } = useCart();
+
+  const { fontScale } = useUi();
+  const { colors } = useThemeColors();
 
   const [name, setName] = useState("");
   const [card, setCard] = useState("");
@@ -54,7 +59,6 @@ export default function PaymentScreen() {
         return;
       }
 
-      // Crear referencia a la subcolección de compras del usuario
       const userRef = doc(db, "users", user.uid);
       const purchasesRef = collection(userRef, "purchases");
 
@@ -93,33 +97,73 @@ export default function PaymentScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Pasarela de Pago 💳</Text>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.bg }]}
+      contentContainerStyle={{ paddingBottom: 40 }}
+    >
+      <Text
+        style={[
+          styles.title,
+          { color: colors.text, fontSize: 24 * fontScale },
+        ]}
+      >
+        Pasarela de Pago 💳
+      </Text>
 
-      <View style={styles.cardPreview}>
-        <Text style={styles.cardNumber}>
+      {/* Tarjeta visual */}
+      <View
+        style={[
+          styles.cardPreview,
+          { backgroundColor: colors.card, borderColor: colors.border },
+        ]}
+      >
+        <Text
+          style={[
+            styles.cardNumber,
+            { color: colors.text, fontSize: 20 * fontScale },
+          ]}
+        >
           {card ? card.replace(/\d(?=\d{4})/g, "*") : "**** **** **** ****"}
         </Text>
         <View style={styles.cardRow}>
-          <Text style={styles.cardHolder}>{name || "NOMBRE DEL TITULAR"}</Text>
-          <Text style={styles.cardExpiry}>{expiry || "MM/AA"}</Text>
+          <Text
+            style={[
+              styles.cardHolder,
+              { color: colors.subtext, fontSize: 14 * fontScale },
+            ]}
+          >
+            {name || "NOMBRE DEL TITULAR"}
+          </Text>
+          <Text
+            style={[
+              styles.cardExpiry,
+              { color: colors.subtext, fontSize: 14 * fontScale },
+            ]}
+          >
+            {expiry || "MM/AA"}
+          </Text>
         </View>
       </View>
 
-      <Text style={styles.label}>Nombre completo</Text>
+      {/* Campos */}
+      <Text style={[styles.label, { color: colors.subtext }]}>
+        Nombre completo
+      </Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
         placeholder="Ej: Juan Pérez"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.subtext}
         value={name}
         onChangeText={setName}
       />
 
-      <Text style={styles.label}>Número de tarjeta</Text>
+      <Text style={[styles.label, { color: colors.subtext }]}>
+        Número de tarjeta
+      </Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
         placeholder="**** **** **** 1234"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.subtext}
         keyboardType="numeric"
         maxLength={16}
         value={card}
@@ -128,21 +172,23 @@ export default function PaymentScreen() {
 
       <View style={styles.row}>
         <View style={{ flex: 1, marginRight: 10 }}>
-          <Text style={styles.label}>Expira (MM/AA)</Text>
+          <Text style={[styles.label, { color: colors.subtext }]}>
+            Expira (MM/AA)
+          </Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
             placeholder="MM/AA"
-            placeholderTextColor="#888"
+            placeholderTextColor={colors.subtext}
             value={expiry}
             onChangeText={setExpiry}
           />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={styles.label}>CVV</Text>
+          <Text style={[styles.label, { color: colors.subtext }]}>CVV</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
             placeholder="***"
-            placeholderTextColor="#888"
+            placeholderTextColor={colors.subtext}
             secureTextEntry
             keyboardType="numeric"
             maxLength={4}
@@ -152,30 +198,61 @@ export default function PaymentScreen() {
         </View>
       </View>
 
-      <Text style={styles.label}>Dirección</Text>
+      <Text style={[styles.label, { color: colors.subtext }]}>Dirección</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
         placeholder="Ej: Calle 123 #45-67"
-        placeholderTextColor="#888"
+        placeholderTextColor={colors.subtext}
         value={address}
         onChangeText={setAddress}
       />
 
+      {/* Términos */}
       <View style={styles.terms}>
         <TouchableOpacity onPress={() => setTerms(!terms)}>
-          <View style={[styles.checkbox, terms && styles.checked]} />
+          <View
+            style={[
+              styles.checkbox,
+              {
+                borderColor: colors.border,
+                backgroundColor: terms ? colors.primary : "transparent",
+              },
+            ]}
+          />
         </TouchableOpacity>
-        <Text style={styles.termsText}>Acepto los términos y condiciones</Text>
+        <Text
+          style={[
+            styles.termsText,
+            { color: colors.subtext, fontSize: 14 * fontScale },
+          ]}
+        >
+          Acepto los términos y condiciones
+        </Text>
       </View>
 
-      <Text style={styles.total}>Total a pagar: {money(total)}</Text>
+      <Text
+        style={[
+          styles.total,
+          { color: colors.primary, fontSize: 18 * fontScale },
+        ]}
+      >
+        Total a pagar: {money(total)}
+      </Text>
 
       <TouchableOpacity
-        style={[styles.button, loading && { backgroundColor: "#555" }]}
+        style={[
+          styles.button,
+          { backgroundColor: loading ? colors.border : colors.primary },
+        ]}
         onPress={handlePayment}
         disabled={loading}
       >
-        <Text style={styles.buttonText}>
+        <Text
+          style={[
+            styles.buttonText,
+            { color: "#fff", fontSize: 16 * fontScale },
+          ]}
+        >
           {loading ? "Procesando..." : "Confirmar pago"}
         </Text>
       </TouchableOpacity>
@@ -184,23 +261,19 @@ export default function PaymentScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#111", padding: 20 },
+  container: { flex: 1, padding: 20 },
   title: {
-    color: "#fff",
-    fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
   },
   cardPreview: {
-    backgroundColor: "#1e1e2e",
     borderRadius: 15,
     padding: 20,
     marginBottom: 25,
+    borderWidth: 1,
   },
   cardNumber: {
-    color: "#fff",
-    fontSize: 20,
     letterSpacing: 2,
     marginBottom: 15,
   },
@@ -208,12 +281,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  cardHolder: { color: "#ccc", textTransform: "uppercase" },
-  cardExpiry: { color: "#ccc" },
-  label: { color: "#ccc", marginTop: 10, marginBottom: 5 },
+  cardHolder: { textTransform: "uppercase" },
+  cardExpiry: {},
+  label: { marginTop: 10, marginBottom: 5 },
   input: {
-    backgroundColor: "#222",
-    color: "#fff",
     borderRadius: 8,
     padding: 10,
   },
@@ -222,25 +293,22 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 20,
     height: 20,
-    borderWidth: 1,
-    borderColor: "#888",
+    borderWidth: 2,
     marginRight: 10,
-    borderRadius: 4,
+    borderRadius: 5,
   },
-  checked: { backgroundColor: "#1e90ff" },
-  termsText: { color: "#ccc", flex: 1 },
+  termsText: { flex: 1 },
   total: {
-    color: "#fff",
-    fontSize: 18,
     textAlign: "center",
     marginVertical: 20,
     fontWeight: "bold",
   },
   button: {
-    backgroundColor: "#1e90ff",
     padding: 14,
     borderRadius: 10,
     alignItems: "center",
   },
-  buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  buttonText: {
+    fontWeight: "bold",
+  },
 });

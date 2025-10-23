@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useUi } from "../context/UiContext";
+import useThemeColors from "../styles/themes";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useNavigation } from "@react-navigation/native";
@@ -16,9 +17,8 @@ import NavBar from "../components/NavBar";
 export default function Car() {
   const { cartItems, removeFromCart, clearCart } = useCart();
   const navigation = useNavigation();
-
-  const { theme } = useUi();
-  const dark = theme === "dark";
+  const { fontScale } = useUi();
+  const { colors } = useThemeColors();
 
   const total = cartItems.reduce(
     (acc, item) => acc + Number(item.price) * (item.quantity || 1),
@@ -27,10 +27,13 @@ export default function Car() {
 
   if (cartItems.length === 0) {
     return (
-      <View
-        style={[styles.container, { backgroundColor: dark ? "#000" : "#fff" }]}
-      >
-        <Text style={[styles.empty, { color: dark ? "#ccc" : "333" }]}>
+      <View style={[styles.container, { backgroundColor: colors.bg }]}>
+        <Text
+          style={[
+            styles.empty,
+            { color: colors.subtext, fontSize: 18 * fontScale },
+          ]}
+        >
           Tu carrito está vacío
         </Text>
       </View>
@@ -38,9 +41,7 @@ export default function Car() {
   }
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: dark ? "#000" : "#fff" }]}
-    >
+    <View style={[styles.container, { backgroundColor: colors.bg }]}>
       <NavBar showBack={true} />
 
       <FlatList
@@ -49,22 +50,33 @@ export default function Car() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View
-            style={[styles.item, { backgroundColor: dark ? "#222" : "eee" }]}
+            style={[
+              styles.item,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
           >
             <Image source={item.image} style={styles.image} />
 
             <View style={styles.info}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>Precio: {money(item.price)}</Text>
-              <Text style={styles.quantity}>
+              <Text
+                style={[styles.name, { color: colors.text, fontSize: 16 * fontScale }]}
+              >
+                {item.name}
+              </Text>
+              <Text style={[styles.price, { color: colors.subtext }]}>
+                Precio: {money(item.price)}
+              </Text>
+              <Text style={[styles.quantity, { color: colors.subtext }]}>
                 Cantidad: {item.quantity || 1}
               </Text>
-              <Text style={styles.subtotal}>
+              <Text style={[styles.subtotal, { color: colors.text }]}>
                 Subtotal: {money(item.price * (item.quantity || 1))}
               </Text>
 
               <TouchableOpacity onPress={() => removeFromCart(item.id)}>
-                <Text style={styles.remove}>Eliminar</Text>
+                <Text style={[styles.remove, { color: "#E91E63" }]}>
+                  Eliminar
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -72,19 +84,34 @@ export default function Car() {
       />
 
       <View style={styles.totalContainer}>
-        <Text style={[styles.totalText, { color: dark ? "#fff" : "#111" }]}>
+        <Text
+          style={[
+            styles.totalText,
+            { color: colors.text, fontSize: 22 * fontScale },
+          ]}
+        >
           Total a pagar: {money(total)}
         </Text>
 
         <TouchableOpacity
-          style={styles.buyButton}
+          style={[styles.buyButton, { backgroundColor: colors.primary }]}
           onPress={() => navigation.navigate("Checkout", { total })}
         >
-          <Text style={styles.buyText}>Finalizar compra</Text>
+          <Text style={[styles.buyText, { fontSize: 16 * fontScale }]}>
+            Finalizar compra
+          </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.clearButton} onPress={clearCart}>
-          <Text style={styles.clearText}>Vaciar carrito</Text>
+        <TouchableOpacity
+          style={[
+            styles.clearButton,
+            { borderColor: colors.primary, borderWidth: 1 },
+          ]}
+          onPress={clearCart}
+        >
+          <Text style={[styles.clearText, { color: colors.primary }]}>
+            Vaciar carrito
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -95,36 +122,34 @@ const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
   item: {
     flexDirection: "row",
-    backgroundColor: "#222",
     padding: 10,
     borderRadius: 10,
     marginBottom: 10,
+    borderWidth: 1,
   },
   image: { width: 60, height: 60, borderRadius: 10 },
   info: { flex: 1, marginLeft: 10 },
-  name: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  price: { color: "#ccc", marginTop: 4 },
-  quantity: { color: "#ccc", marginTop: 2 },
-  subtotal: { color: "#fff", marginTop: 4, fontWeight: "bold" },
-  remove: { color: "#ff4d4d", marginTop: 8 },
-  empty: { color: "#ccc", textAlign: "center", marginTop: 50, fontSize: 18 },
+  name: { fontWeight: "bold" },
+  price: { marginTop: 4 },
+  quantity: { marginTop: 2 },
+  subtotal: { marginTop: 4, fontWeight: "bold" },
+  remove: { marginTop: 8 },
+  empty: { textAlign: "center", marginTop: 50 },
   totalContainer: { marginTop: 20, alignItems: "center" },
-  totalText: { color: "#fff", fontSize: 22, marginBottom: 10 },
+  totalText: { fontWeight: "bold", marginBottom: 10 },
   buyButton: {
-    backgroundColor: "#E91E63",
     padding: 12,
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
     marginBottom: 10,
   },
-  buyText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  buyText: { color: "#fff", fontWeight: "bold" },
   clearButton: {
-    backgroundColor: "#E91E63",
     padding: 10,
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
   },
-  clearText: { color: "#fff", fontSize: 15 },
+  clearText: { fontWeight: "bold" },
 });

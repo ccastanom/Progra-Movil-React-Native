@@ -37,7 +37,6 @@ export default function LoginScreen({ navigation }) {
       console.error("Error al iniciar sesión:", error);
       let message = "Ocurrió un error al iniciar sesión";
 
-      // 🔹 Manejo de errores detallado
       if (error.code === "auth/user-not-found") {
         message = "Usuario no registrado";
       } else if (
@@ -55,6 +54,15 @@ export default function LoginScreen({ navigation }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  // 🔹 Ingreso rápido como invitado
+  const handleGuestLogin = () => {
+    Alert.alert(
+      "Modo invitado",
+      "Has ingresado como invitado. Algunas funciones podrían estar limitadas.",
+      [{ text: "Continuar", onPress: () => navigation.replace("Principal") }]
+    );
   };
 
   return (
@@ -84,39 +92,39 @@ export default function LoginScreen({ navigation }) {
       {/* Formulario */}
       <View style={styles.content}>
         <TextInput
-  placeholder="Correo electrónico"
-  placeholderTextColor={colors.subtext}
-  style={[
-    styles.input,
-    {
-      borderColor: colors.primary,
-      color: colors.text,
-      backgroundColor: colors.card, // 👈 se adapta al tema
-    },
-  ]}
-  keyboardType="email-address"
-  autoCapitalize="none"
-  value={email}
-  onChangeText={setEmail}
-/>
+          placeholder="Correo electrónico"
+          placeholderTextColor={colors.subtext}
+          style={[
+            styles.input,
+            {
+              borderColor: colors.primary,
+              color: colors.text,
+              backgroundColor: colors.card,
+            },
+          ]}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+        />
 
-<TextInput
-  placeholder="Contraseña"
-  placeholderTextColor={colors.subtext}
-  style={[
-    styles.input,
-    {
-      borderColor: colors.primary,
-      color: colors.text,
-      backgroundColor: colors.card, 
-    },
-  ]}
-  secureTextEntry
-  value={password}
-  onChangeText={setPassword}
-/>
+        <TextInput
+          placeholder="Contraseña"
+          placeholderTextColor={colors.subtext}
+          style={[
+            styles.input,
+            {
+              borderColor: colors.primary,
+              color: colors.text,
+              backgroundColor: colors.card,
+            },
+          ]}
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
 
-
+        {/* Botón de iniciar sesión */}
         <TouchableOpacity
           style={[styles.button, { backgroundColor: colors.primary }]}
           onPress={handleLogin}
@@ -129,6 +137,17 @@ export default function LoginScreen({ navigation }) {
           )}
         </TouchableOpacity>
 
+        {/* Botón de invitado */}
+        <TouchableOpacity
+          style={[styles.guestButton, { borderColor: colors.primary }]}
+          onPress={handleGuestLogin}
+        >
+          <Text style={[styles.guestText, { color: colors.primary }]}>
+            Ingresar como invitado
+          </Text>
+        </TouchableOpacity>
+
+        {/* Registro */}
         <TouchableOpacity
           onPress={() => navigation.navigate("Register")}
           style={{ marginTop: 12 }}
@@ -150,7 +169,7 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1 },
   headerImage: {
     width: "105%",
     height: 400,
@@ -175,21 +194,27 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     marginBottom: 12,
-    backgroundColor: "rgba(255,255,255,0.9)",
   },
   button: {
     paddingVertical: 14,
-    paddingHorizontal: 40,
     borderRadius: 30,
     width: "100%",
     alignItems: "center",
     marginTop: 10,
   },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  guestButton: {
+    marginTop: 10,
+    borderWidth: 1.5,
+    borderRadius: 30,
+    width: "100%",
+    alignItems: "center",
+    paddingVertical: 12,
+  },
+  guestText: { fontSize: 16, fontWeight: "bold" },
   imgEnd: { opacity: 0.5, marginTop: 30 },
   navBar: {
     height: 75,
-    backgroundColor: "#ffffffcc",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -201,5 +226,5 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   logoWrap: { justifyContent: "center", alignItems: "center" },
-  brand: { fontSize: 18, fontWeight: "800", color: "#E91E63" },
+  brand: { fontSize: 18, fontWeight: "800" },
 });
