@@ -1,35 +1,32 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-  ImageBackground,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import {StyleSheet, Text, View, TouchableOpacity, TextInput, ImageBackground, Alert, ActivityIndicator,} from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
 import useThemeColors from "../styles/themes";
+
+// Firebase
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { app, db } from "../firebase/config";
 import { doc, setDoc } from "firebase/firestore";
 
+// Pantalla de registro
 export default function RegisterScreen({ navigation }) {
   const { colors, isDark } = useThemeColors();
   const auth = getAuth(app);
 
+  // Estados para el formulario
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Función para manejar el registro
   const handleRegister = async () => {
     if (!name || !email || !password) {
       Alert.alert("Error", "Por favor completa todos los campos");
       return;
     }
 
+    // Registro con Firebase Auth
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -43,7 +40,6 @@ export default function RegisterScreen({ navigation }) {
         email,
         createdAt: new Date(),
       });
-
       Alert.alert("Éxito 🎉", "Tu cuenta ha sido creada con éxito");
       navigation.replace("Principal");
     } catch (error) {
@@ -61,8 +57,11 @@ export default function RegisterScreen({ navigation }) {
     }
   };
 
+  // Renderizado
   return (
+    // Contenedor principal
     <View style={[styles.container, { backgroundColor: colors.bg }]}>
+
       {/* NavBar */}
       <View style={[styles.navBar, { backgroundColor: colors.card }]}>
         <View style={styles.logoWrap}>
