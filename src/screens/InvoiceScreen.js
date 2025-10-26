@@ -125,7 +125,7 @@ export default function InvoiceScreen() {
         {/* Botón para volver al inicio */}
         <TouchableOpacity
           style={[styles.backButton, { backgroundColor: colors.primary }]}
-          onPress={() => navigation.navigate("Principal")} // Cambia "Home" si tu pantalla principal se llama diferente
+          onPress={() => navigation.navigate("Principal")} 
         >
           <Text style={styles.backButtonText}>Volver al inicio</Text>
         </TouchableOpacity>

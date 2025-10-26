@@ -67,7 +67,8 @@ export default function MainNavigator() {
               options={{ title: "Pago" }}
             />
             <Stack.Screen name="Invoice" 
-            component={InvoiceScreen} 
+            component={InvoiceScreen}
+            options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Register"
