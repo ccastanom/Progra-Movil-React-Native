@@ -13,8 +13,6 @@ import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useUi } from "../context/UiContext";
 import useThemeColors from "../styles/themes";
-
-// Firebase
 import { db } from "../firebase/config";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
@@ -24,7 +22,6 @@ export default function PaymentScreen() {
   const route = useRoute();
   const { total } = route.params;
   const { clearCart, cartItems } = useCart();
-
   const { fontScale } = useUi();
   const { colors } = useThemeColors();
 
@@ -36,58 +33,110 @@ export default function PaymentScreen() {
   const [terms, setTerms] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handlePayment = async () => {
-  if (!name || !card || !expiry || !cvv || !address) {
-    Alert.alert("Campos incompletos", "Por favor completa todos los campos.");
-    return;
-  }
-  if (!terms) {
-    Alert.alert("Términos", "Debes aceptar los términos y condiciones.");
-    return;
-  }
-
-  setLoading(true);
-  Alert.alert("Procesando pago...", "Por favor espera unos segundos.");
-
-  try {
-    const auth = getAuth();
-    const user = auth.currentUser;
-
-    if (!user) {
-      setLoading(false);
-      Alert.alert("Sesión requerida", "Debes iniciar sesión para pagar.");
-      return;
+  // 🔹 Valida nombre, fecha y cvv antes del pago
+  const validateFields = () => {
+    if (!name || !card || !expiry || !cvv || !address) {
+      Alert.alert("Campos incompletos", "Por favor completa todos los campos.");
+      return false;
     }
 
-    // Referencias
-    const userRef = doc(db, "users", user.uid);
-    const purchasesRef = collection(userRef, "purchases");
+    if (name.length < 3 || name.length > 20) {
+      Alert.alert("Nombre inválido", "Debe tener entre 3 y 20 caracteres.");
+      return false;
+    }
 
-    // Guardar la compra
-    const docRef = await addDoc(purchasesRef, {
-      name,
-      address,
-      total,
-      items: cartItems.map((item) => ({
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-      })),
-      createdAt: serverTimestamp(),
-    });
+    // Validar formato MM/AA
+    const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+    if (!expiryRegex.test(expiry)) {
+      Alert.alert("Fecha inválida", "Usa el formato MM/AA (por ejemplo 07/28).");
+      return false;
+    }
 
-    setTimeout(() => {
+    // Validar fecha no expirada
+    const [month, year] = expiry.split("/").map(Number);
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1;
+    const currentYear = currentDate.getFullYear() % 100;
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      Alert.alert("Tarjeta vencida", "La fecha de expiración no es válida.");
+      return false;
+    }
+
+    // Validar CVV
+    if (!/^\d{3}$/.test(cvv)) {
+      Alert.alert("CVV inválido", "Debe tener exactamente 3 números.");
+      return false;
+    }
+
+    if (!terms) {
+      Alert.alert("Términos", "Debes aceptar los términos y condiciones.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handlePayment = async () => {
+    if (!validateFields()) return;
+
+    setLoading(true);
+    Alert.alert("Procesando pago...", "Por favor espera unos segundos.");
+
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        setLoading(false);
+        Alert.alert("Sesión requerida", "Debes iniciar sesión para pagar.");
+        return;
+      }
+
+      const userRef = doc(db, "users", user.uid);
+      const purchasesRef = collection(userRef, "purchases");
+
+      const docRef = await addDoc(purchasesRef, {
+        name,
+        address,
+        total,
+        items: cartItems.map((item) => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        createdAt: serverTimestamp(),
+      });
+
+      setTimeout(() => {
+        setLoading(false);
+        clearCart();
+        navigation.navigate("Invoice", { purchaseId: docRef.id });
+      }, 1000);
+    } catch (error) {
       setLoading(false);
-      clearCart();
-      navigation.navigate("Invoice", { purchaseId: docRef.id }); // 👈 Enviar ID de la factura
-    }, 1000);
-  } catch (error) {
-    setLoading(false);
-    console.error("Error al registrar la compra:", error);
-    Alert.alert("Error", "Hubo un problema al procesar el pago.");
-  }
-};
+      console.error("Error al registrar la compra:", error);
+      Alert.alert("Error", "Hubo un problema al procesar el pago.");
+    }
+  };
 
+  // 🔸 Formato automático MM/AA
+  const handleExpiryChange = (text) => {
+    // Eliminar caracteres no numéricos
+    let formatted = text.replace(/[^0-9]/g, "");
+
+    // Insertar la barra automáticamente después de 2 números
+    if (formatted.length > 2) {
+      formatted = formatted.slice(0, 2) + "/" + formatted.slice(2, 4);
+    }
+
+    setExpiry(formatted);
+  };
+
+  // 🔸 CVV solo números (máx 3)
+  const handleCvvChange = (text) => {
+    const numeric = text.replace(/[^0-9]/g, "").slice(0, 3);
+    setCvv(numeric);
+  };
 
   return (
     <ScrollView
@@ -95,15 +144,12 @@ export default function PaymentScreen() {
       contentContainerStyle={{ paddingBottom: 40 }}
     >
       <Text
-        style={[
-          styles.title,
-          { color: colors.text, fontSize: 24 * fontScale },
-        ]}
+        style={[styles.title, { color: colors.text, fontSize: 24 * fontScale }]}
       >
         Pasarela de Pago 💳
       </Text>
 
-      {/* Tarjeta visual */}
+      {/* Vista previa de tarjeta */}
       <View
         style={[
           styles.cardPreview,
@@ -160,7 +206,7 @@ export default function PaymentScreen() {
         keyboardType="numeric"
         maxLength={16}
         value={card}
-        onChangeText={setCard}
+        onChangeText={(text) => setCard(text.replace(/[^0-9]/g, ""))}
       />
 
       <View style={styles.row}>
@@ -173,9 +219,12 @@ export default function PaymentScreen() {
             placeholder="MM/AA"
             placeholderTextColor={colors.subtext}
             value={expiry}
-            onChangeText={setExpiry}
+            onChangeText={handleExpiryChange}
+            keyboardType="numeric"
+            maxLength={5}
           />
         </View>
+
         <View style={{ flex: 1 }}>
           <Text style={[styles.label, { color: colors.subtext }]}>CVV</Text>
           <TextInput
@@ -184,9 +233,9 @@ export default function PaymentScreen() {
             placeholderTextColor={colors.subtext}
             secureTextEntry
             keyboardType="numeric"
-            maxLength={4}
+            maxLength={3}
             value={cvv}
-            onChangeText={setCvv}
+            onChangeText={handleCvvChange}
           />
         </View>
       </View>
@@ -224,10 +273,7 @@ export default function PaymentScreen() {
       </View>
 
       <Text
-        style={[
-          styles.total,
-          { color: colors.primary, fontSize: 18 * fontScale },
-        ]}
+        style={[styles.total, { color: colors.primary, fontSize: 18 * fontScale }]}
       >
         Total a pagar: {money(total)}
       </Text>
@@ -241,10 +287,7 @@ export default function PaymentScreen() {
         disabled={loading}
       >
         <Text
-          style={[
-            styles.buttonText,
-            { color: "#fff", fontSize: 16 * fontScale },
-          ]}
+          style={[styles.buttonText, { color: "#fff", fontSize: 16 * fontScale }]}
         >
           {loading ? "Procesando..." : "Confirmar pago"}
         </Text>
