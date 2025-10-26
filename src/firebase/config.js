@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -27,5 +28,5 @@ const auth = initializeAuth(app, {
 
 // Firestore
 const db = getFirestore(app);
-
-export { app, auth, db };
+const storage = getStorage(app);
+export { app, auth, db, storage };
