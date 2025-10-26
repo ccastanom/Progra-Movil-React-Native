@@ -37,64 +37,57 @@ export default function PaymentScreen() {
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
-    if (!name || !card || !expiry || !cvv || !address) {
-      Alert.alert("Campos incompletos", "Por favor completa todos los campos.");
-      return;
-    }
-    if (!terms) {
-      Alert.alert("Términos", "Debes aceptar los términos y condiciones.");
-      return;
-    }
+  if (!name || !card || !expiry || !cvv || !address) {
+    Alert.alert("Campos incompletos", "Por favor completa todos los campos.");
+    return;
+  }
+  if (!terms) {
+    Alert.alert("Términos", "Debes aceptar los términos y condiciones.");
+    return;
+  }
 
-    Alert.alert("Procesando pago...", "Por favor espera unos segundos.");
-    setLoading(true);
+  setLoading(true);
+  Alert.alert("Procesando pago...", "Por favor espera unos segundos.");
 
-    try {
-      const auth = getAuth();
-      const user = auth.currentUser;
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-      if (!user) {
-        setLoading(false);
-        Alert.alert("Sesión requerida", "Debes iniciar sesión para pagar.");
-        return;
-      }
-
-      const userRef = doc(db, "users", user.uid);
-      const purchasesRef = collection(userRef, "purchases");
-
-      await addDoc(purchasesRef, {
-        name,
-        address,
-        total,
-        items: cartItems.map((item) => ({
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-        })),
-        createdAt: serverTimestamp(),
-      });
-
-      setTimeout(() => {
-        setLoading(false);
-        Alert.alert("Pago exitoso 🎉", "Tu compra se ha completado con éxito.", [
-          {
-            text: "Aceptar",
-            onPress: () => {
-              clearCart();
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "Principal" }],
-              });
-            },
-          },
-        ]);
-      }, 1000);
-    } catch (error) {
+    if (!user) {
       setLoading(false);
-      console.error("Error al registrar la compra:", error);
-      Alert.alert("Error", "Hubo un problema al procesar el pago.");
+      Alert.alert("Sesión requerida", "Debes iniciar sesión para pagar.");
+      return;
     }
-  };
+
+    // Referencias
+    const userRef = doc(db, "users", user.uid);
+    const purchasesRef = collection(userRef, "purchases");
+
+    // Guardar la compra
+    const docRef = await addDoc(purchasesRef, {
+      name,
+      address,
+      total,
+      items: cartItems.map((item) => ({
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+      createdAt: serverTimestamp(),
+    });
+
+    setTimeout(() => {
+      setLoading(false);
+      clearCart();
+      navigation.navigate("Invoice", { purchaseId: docRef.id }); // 👈 Enviar ID de la factura
+    }, 1000);
+  } catch (error) {
+    setLoading(false);
+    console.error("Error al registrar la compra:", error);
+    Alert.alert("Error", "Hubo un problema al procesar el pago.");
+  }
+};
+
 
   return (
     <ScrollView

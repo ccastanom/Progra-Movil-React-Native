@@ -14,6 +14,7 @@ import MyTabs from "./MyTabs";
 import CheckoutScreen from "../screens/CheckoutScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import InvoiceScreen from "../screens/InvoiceScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,9 @@ export default function MainNavigator() {
               name="Payment"
               component={PaymentScreen}
               options={{ title: "Pago" }}
+            />
+            <Stack.Screen name="Invoice" 
+            component={InvoiceScreen} 
             />
             <Stack.Screen
               name="Register"
