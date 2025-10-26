@@ -35,7 +35,13 @@ export default function ProductListScreen({ navigation }) {
           id: doc.id,
           ...doc.data(),
         }));
-        setProducts(list);
+
+        // 🧠 Mezclar los productos aleatoriamente y tomar 4
+        const randomProducts = list
+          .sort(() => Math.random() - 0.5) // mezcla aleatoria
+          .slice(0, 4); // tomar 4 elementos
+
+        setProducts(randomProducts);
       } catch (error) {
         console.error("Error al cargar productos:", error);
       } finally {
