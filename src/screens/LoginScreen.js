@@ -1,16 +1,8 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ImageBackground,
-  TextInput,
-  Alert,
-  ActivityIndicator,
+import {StyleSheet, Text, View, TouchableOpacity, ImageBackground, TextInput, Alert, ActivityIndicator,
 } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
-import useThemeColors from "../styles/themes";
+import useThemeColors from "../styles/Themes";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase/config";
 
@@ -20,14 +12,16 @@ export default function LoginScreen({ navigation }) {
 
   const DEV_MODE = false;
 
+  // Estados del formulario
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  
+  // Manejar inicio de sesión
   const handleLogin = async () => {
- 
+    // Modo desarrollo
     if (DEV_MODE) {
-      Alert.alert("Modo desarrollo", "Inicio directo sin credenciales ✅");
+      Alert.alert("Modo desarrollo");
       navigation.replace("Principal");
       return;
     }
@@ -36,32 +30,39 @@ export default function LoginScreen({ navigation }) {
       Alert.alert("Error", "Por favor ingresa tu correo y contraseña");
       return;
     }
-
+    // Iniciar sesión con Firebase Auth
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("Bienvenido", "Inicio de sesión exitoso 🎉");
+      Alert.alert("Bienvenido a Que Rollo ❤️", "Inicio de sesión exitoso");
       navigation.replace("Principal");
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
-      let message = "Ocurrió un error al iniciar sesión";
-
+      let message = "Pero no te preocupes, no es tu culpa.";
+      let msm = "Ocurrio un error al iniciar sesión.";
+      
+      // Manejo de errores comunes
       if (error.code === "auth/user-not-found") {
-        message = "Usuario no registrado";
+        msm = "Usuario no encontrado.";
+        message = "Crea una cuenta para continuar.";
       } else if (
         error.code === "auth/wrong-password" ||
         error.code === "auth/invalid-credential"
       ) {
-        message = "Contraseña incorrecta";
+        msm = "Inicio de sesión fallido.";
+        message = "Contraseña incorrecta o correo invalido.";
       } else if (error.code === "auth/invalid-email") {
+        msm = "Inicio de sesión fallido.";
         message = "Correo inválido";
       } else if (error.code === "auth/network-request-failed") {
+        msm = "Error de red.";
         message = "Error de conexión. Revisa tu internet.";
       } else if (error.code === "auth/user-disabled") {
-        message = "Oops, tu cuenta ha sido deshabilitada. Contacta soporte.";
+        msm = "Cuenta deshabilitada.";
+        message = "Oops, desafortunadamente tu cuenta ha sido deshabilitada. Contacta soporte.";
       }
 
-      Alert.alert("Error", message);
+      Alert.alert(msm, message);
     } finally {
       setLoading(false);
     }

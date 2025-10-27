@@ -1,4 +1,3 @@
-// src/firebase/config.js
 import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   initializeAuth,
@@ -21,7 +20,7 @@ const firebaseConfig = {
 // Evitar inicialización duplicada
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// ✅ Crear Auth con persistencia para React Native
+// Crear Auth con persistencia para React Native
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });

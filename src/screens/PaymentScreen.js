@@ -1,18 +1,11 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ScrollView,
+import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useUi } from "../context/UiContext";
-import useThemeColors from "../styles/themes";
+import useThemeColors from "../styles/Themes";
 import { db } from "../firebase/config";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
@@ -33,7 +26,7 @@ export default function PaymentScreen() {
   const [terms, setTerms] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Valida nombre, fecha y cvv antes del pago
+  // Validaciones
   const validateFields = () => {
     if (!name || !card || !expiry || !cvv || !address) {
       Alert.alert("Campos incompletos", "Por favor completa todos los campos.");
@@ -92,9 +85,9 @@ export default function PaymentScreen() {
         return;
       }
 
+      // Guardar compra en Firestore
       const userRef = doc(db, "users", user.uid);
       const purchasesRef = collection(userRef, "purchases");
-
       const docRef = await addDoc(purchasesRef, {
         name,
         address,
@@ -119,7 +112,7 @@ export default function PaymentScreen() {
     }
   };
 
-  // 🔸 Formato automático MM/AA
+  // Formato automático MM/AA
   const handleExpiryChange = (text) => {
     // Eliminar caracteres no numéricos
     let formatted = text.replace(/[^0-9]/g, "");
@@ -132,7 +125,7 @@ export default function PaymentScreen() {
     setExpiry(formatted);
   };
 
-  // 🔸 CVV solo números (máx 3)
+  // CVV solo números (máx 3)
   const handleCvvChange = (text) => {
     const numeric = text.replace(/[^0-9]/g, "").slice(0, 3);
     setCvv(numeric);
@@ -243,7 +236,7 @@ export default function PaymentScreen() {
       <Text style={[styles.label, { color: colors.subtext }]}>Dirección</Text>
       <TextInput
         style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
-        placeholder="Ej: Calle 123 #45-67"
+        placeholder="Ej: Calle falsa #12-34"
         placeholderTextColor={colors.subtext}
         value={address}
         onChangeText={setAddress}
@@ -268,7 +261,7 @@ export default function PaymentScreen() {
             { color: colors.subtext, fontSize: 14 * fontScale },
           ]}
         >
-          Acepto los términos y condiciones
+          Acepto los términos y condiciones.
         </Text>
       </View>
 
