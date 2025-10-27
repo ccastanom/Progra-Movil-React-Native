@@ -1,19 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  Dimensions,
-  ActivityIndicator,
-} from "react-native";
+import {View, Text, FlatList, TouchableOpacity, Image, ImageBackground, StyleSheet, Dimensions, ActivityIndicator,} from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
 import NavBar from "../components/NavBar";
-import useThemeColors from "../styles/themes";
+import useThemeColors from "../styles/Themes";
 import { useUi } from "../context/UiContext";
 
 const { width } = Dimensions.get("window");
@@ -26,20 +16,20 @@ export default function ProductListScreen({ navigation }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 Cargar productos desde Firestore
+  // Cargar productos desde Firestore
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "productos"));
-        const list = querySnapshot.docs.map((doc) => ({
+        const productos = await getDocs(collection(db, "productos"));
+        const list = productos.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        // 🧠 Mezclar los productos aleatoriamente y tomar 4
+        // Mezclar los productos aleatoriamente
         const randomProducts = list
-          .sort(() => Math.random() - 0.5) // mezcla aleatoria
-          .slice(0, 4); // tomar 4 elementos
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 4);
 
         setProducts(randomProducts);
       } catch (error) {
@@ -51,6 +41,7 @@ export default function ProductListScreen({ navigation }) {
     fetchProducts();
   }, []);
 
+  // Renderizar cada tarjeta de producto
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate("ProductDetail", { product: item })}

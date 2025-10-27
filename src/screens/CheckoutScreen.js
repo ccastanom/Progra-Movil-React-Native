@@ -7,7 +7,7 @@ import {
   Alert,
 } from "react-native";
 import { useUi } from "../context/UiContext";
-import useThemeColors from "../styles/themes"; // 👈 Importa tu hook de temas
+import useThemeColors from "../styles/Themes"; // 👈 Importa tu hook de temas
 
 export default function CheckoutScreen({ route, navigation }) {
   const { fontScale } = useUi();

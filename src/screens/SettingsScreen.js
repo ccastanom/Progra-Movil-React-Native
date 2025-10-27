@@ -83,7 +83,6 @@ export default function SettingsScreen() {
       <NavBar showBack />
       <View style={{ height: spacer }} />
 
-      {/* 🔹 Sección: Perfil */}
       <View style={[styles.section, { backgroundColor: colors.card }]}>
         <Text style={[styles.title, { color: colors.text }]}>Perfil</Text>
 
@@ -121,7 +120,6 @@ export default function SettingsScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* 🔹 Sección: Apariencia */}
       <View style={[styles.section, { backgroundColor: colors.card }]}>
         <Text style={[styles.title, { color: colors.text }]}>Apariencia</Text>
 
@@ -142,7 +140,6 @@ export default function SettingsScreen() {
         </View>
       </View>
 
-      {/* 🔹 Sección: Tamaño de texto */}
       <View style={[styles.section, { backgroundColor: colors.card }]}>
         <Text style={[styles.title, { color: colors.text }]}>Tamaño de texto</Text>
 

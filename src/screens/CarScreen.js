@@ -1,14 +1,6 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity,} from "react-native";
 import { useUi } from "../context/UiContext";
-import useThemeColors from "../styles/themes";
+import useThemeColors from "../styles/Themes";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useNavigation } from "@react-navigation/native";
@@ -20,6 +12,7 @@ export default function Car() {
   const { fontScale } = useUi();
   const { colors } = useThemeColors();
 
+  // Calcular total
   const total = cartItems.reduce(
     (acc, item) => acc + Number(item.price) * (item.quantity || 1),
     0
@@ -55,27 +48,33 @@ export default function Car() {
               { backgroundColor: colors.card, borderColor: colors.border },
             ]}
           >
-            {/* Imagen */}
+            {/* Imagen del producto */}
             {item.image ? (
-              <Image
-              source={{ uri: item.image }}
-              style={styles.image}
-              />
+              <Image source={{ uri: item.image }} style={styles.image} />
             ) : (
               <View
                 style={[
                   styles.image,
-                  { backgroundColor: colors.border, justifyContent: "center", alignItems: "center" },
+                  {
+                    backgroundColor: colors.border,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
                 ]}
-                >
-                <Text style={{ color: colors.subtext, fontSize: 12 }}>Sin imagen</Text>
+              >
+                <Text style={{ color: colors.subtext, fontSize: 12 }}>
+                  Sin imagen
+                </Text>
               </View>
             )}
 
-
+            {/* Información del producto */}
             <View style={styles.info}>
               <Text
-                style={[styles.name, { color: colors.text, fontSize: 16 * fontScale }]}
+                style={[
+                  styles.name,
+                  { color: colors.text, fontSize: 16 * fontScale },
+                ]}
               >
                 {item.name}
               </Text>
@@ -99,6 +98,7 @@ export default function Car() {
         )}
       />
 
+      {/* Total y botones */}
       <View style={styles.totalContainer}>
         <Text
           style={[

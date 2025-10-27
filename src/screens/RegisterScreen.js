@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {StyleSheet, Text, View, TouchableOpacity, TextInput, ImageBackground, Alert, ActivityIndicator,} from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
-import useThemeColors from "../styles/themes";
+import useThemeColors from "../styles/Themes";
 
 // Firebase
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
