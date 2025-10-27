@@ -13,22 +13,28 @@ import { money } from "../utils/format";
 import useThemeColors from "../styles/themes";
 import { useCart } from "../context/CartContext";
 
-export default function ProductDetailScreen({ route }) {
+export default function ProductDetailScreen({ route, navigation }) {
   const { colors } = useThemeColors();
   const { product } = route.params;
   const [qty, setQty] = useState(1);
   const { addToCart } = useCart();
   const total = product.price * qty;
 
-  // ✅ Definimos la función que faltaba
+  // ✅ Agregar al carrito
   const handleAddToCart = () => {
-  const image = product.image || product.imageUrl || ""; // Garantiza que exista algo
-  const productWithImage = { ...product, image }; // Crea una copia segura
+    const image = product.image || product.imageUrl || "";
+    const productWithImage = { ...product, image };
 
-  addToCart(productWithImage, qty);
-  Alert.alert("Éxito", `${product.name} fue agregado al carrito 🛒`);
-};
+    addToCart(productWithImage, qty);
+    Alert.alert("Éxito", `${product.name} fue agregado al carrito 🛒`);
+  };
 
+  // Botón comprar
+  const handleBuyNow = () => {
+    const image = product.image || product.imageUrl || "";
+    const productWithImage = { ...product, image, qty, total };
+    navigation.navigate("Checkout", { total });
+  };
 
   return (
     <ScrollView
@@ -38,7 +44,10 @@ export default function ProductDetailScreen({ route }) {
       <NavBar showBack={true} />
 
       {/* Imagen del producto */}
-      <Image source={{ uri: product.image || product.imageUrl }} style={styles.heroImage} />
+      <Image
+        source={{ uri: product.image || product.imageUrl }}
+        style={styles.heroImage}
+      />
 
       {/* Nombre y precio */}
       <Text style={[styles.title, { color: colors.text }]}>{product.name}</Text>
@@ -75,13 +84,22 @@ export default function ProductDetailScreen({ route }) {
         Total: {money(total)}
       </Text>
 
-      {/* Comprar */}
-      <View style={{ marginTop: 8 }}>
-        <Button
-          title="Agregar al carrito"
-          color={colors.primary}
-          onPress={handleAddToCart}
-        />
+      {/* Botones de acción */}
+      <View style={styles.buttonGroup}>
+        <View style={{ flex: 1, marginRight: 8 }}>
+          <Button
+            title="Agregar al carrito"
+            color={colors.primary}
+            onPress={handleAddToCart}
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Button
+            title="Comprar ahora"
+            color={colors.secondary || "#4CAF50"}
+            onPress={handleBuyNow}
+          />
+        </View>
       </View>
     </ScrollView>
   );
@@ -112,4 +130,10 @@ const styles = StyleSheet.create({
   },
   qtyText: { fontSize: 18, fontWeight: "600" },
   total: { fontSize: 18, fontWeight: "bold", marginBottom: 16 },
+
+  buttonGroup: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
+  },
 });
