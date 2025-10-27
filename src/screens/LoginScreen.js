@@ -25,7 +25,7 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    // 🔸 Si está activo el modo desarrollo, saltar el login
+ 
     if (DEV_MODE) {
       Alert.alert("Modo desarrollo", "Inicio directo sin credenciales ✅");
       navigation.replace("Principal");
