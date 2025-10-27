@@ -18,11 +18,20 @@ export default function LoginScreen({ navigation }) {
   const { colors } = useThemeColors();
   const auth = getAuth(app);
 
+  const DEV_MODE = false;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    // 🔸 Si está activo el modo desarrollo, saltar el login
+    if (DEV_MODE) {
+      Alert.alert("Modo desarrollo", "Inicio directo sin credenciales ✅");
+      navigation.replace("Principal");
+      return;
+    }
+
     if (!email || !password) {
       Alert.alert("Error", "Por favor ingresa tu correo y contraseña");
       return;
@@ -48,21 +57,14 @@ export default function LoginScreen({ navigation }) {
         message = "Correo inválido";
       } else if (error.code === "auth/network-request-failed") {
         message = "Error de conexión. Revisa tu internet.";
+      } else if (error.code === "auth/user-disabled") {
+        message = "Oops, tu cuenta ha sido deshabilitada. Contacta soporte.";
       }
 
       Alert.alert("Error", message);
     } finally {
       setLoading(false);
     }
-  };
-
-  // 🔹 Ingreso rápido como invitado
-  const handleGuestLogin = () => {
-    Alert.alert(
-      "Modo invitado",
-      "Has ingresado como invitado. Algunas funciones podrían estar limitadas.",
-      [{ text: "Continuar", onPress: () => navigation.replace("Principal") }]
-    );
   };
 
   return (
@@ -133,32 +135,26 @@ export default function LoginScreen({ navigation }) {
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.buttonText}>Iniciar sesión</Text>
+            <Text style={styles.buttonText}>
+              {DEV_MODE ? "Entrar (modo desarrollo)" : "Iniciar sesión"}
+            </Text>
           )}
         </TouchableOpacity>
 
-        {/* Botón de invitado */}
-        <TouchableOpacity
-          style={[styles.guestButton, { borderColor: colors.primary }]}
-          onPress={handleGuestLogin}
-        >
-          <Text style={[styles.guestText, { color: colors.primary }]}>
-            Ingresar como invitado
-          </Text>
-        </TouchableOpacity>
-
         {/* Registro */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Register")}
-          style={{ marginTop: 12 }}
-        >
-          <Text style={{ color: colors.text }}>
-            ¿No tienes cuenta?{" "}
-            <Text style={{ color: colors.primary, fontWeight: "bold" }}>
-              Regístrate
+        {!DEV_MODE && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Register")}
+            style={{ marginTop: 12 }}
+          >
+            <Text style={{ color: colors.text }}>
+              ¿No tienes cuenta?{" "}
+              <Text style={{ color: colors.primary, fontWeight: "bold" }}>
+                Regístrate
+              </Text>
             </Text>
-          </Text>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
 
         <View style={styles.imgEnd}>
           <SvgIcon width={300} height={300} />
@@ -203,15 +199,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-  guestButton: {
-    marginTop: 10,
-    borderWidth: 1.5,
-    borderRadius: 30,
-    width: "100%",
-    alignItems: "center",
-    paddingVertical: 12,
-  },
-  guestText: { fontSize: 16, fontWeight: "bold" },
   imgEnd: { opacity: 0.5, marginTop: 30 },
   navBar: {
     height: 75,
