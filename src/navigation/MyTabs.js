@@ -28,17 +28,17 @@ function MyTabs() {
         tabBarIcon: ({ color }) => (<MaterialCommunityIcons name="home" size={30} color={color} />),
       }}/>
 
-      <Tab.Screen name="Car" component={Car}
-        options={{headerShown: false,
-        tabBarLabel: 'Carrito',
-        tabBarIcon: ({ color }) => (<MaterialCommunityIcons name="cart" size={30} color={color} />)
-      }} />
-
       <Tab.Screen name="Explore" component={ExploreScreen}
         options={{ headerShown: false,
         tabBarLabel: 'Explorar',
         tabBarIcon: ({ color }) => (<MaterialIcons name="search" size={30} color={color} />)
         }} />
+        
+      <Tab.Screen name="Car" component={Car}
+        options={{headerShown: false,
+        tabBarLabel: 'Carrito',
+        tabBarIcon: ({ color }) => (<MaterialCommunityIcons name="cart" size={30} color={color} />)
+      }} />
 
     <Tab.Screen name="Settings" component={SettingsScreen} 
       options={{ headerShown: false,

@@ -4,39 +4,122 @@ import {
   StyleSheet,
   Switch,
   TouchableOpacity,
+  Image,
+  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import NavBar from "../components/NavBar";
 import { useUi } from "../context/UiContext";
+import { getAuth, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
-const BAR_HEIGHT = 56; // altura visual estimada
+const BAR_HEIGHT = 56;
 
 export default function SettingsScreen() {
-  // Estado global de UI (tema y escala de fuente)
   const { theme, setTheme, fontScale, setFontScale } = useUi();
-
-  // Inset superior para respetar notch / status bar
   const insets = useSafeAreaInsets();
   const spacer = insets.top + BAR_HEIGHT;
+  const navigation = useNavigation();
 
-  // Paleta por tema (dark/light). Solo cambia colores; la estructura es la misma.
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const [userData, setUserData] = useState(null);
+
+  // Paleta por tema
   const isDark = theme === "dark";
   const colors = isDark
     ? { bg: "#111", card: "#1b1b1b", text: "#fff", sub: "#aaa", primary: "#E91E63" }
     : { bg: "#fff", card: "#f7f7f7", text: "#222", sub: "#666", primary: "#E91E63" };
 
-  // Helpers para ajustar la escala de fuentes con límites
-  const inc = () => setFontScale(s => Math.min(1.5, +(s + 0.1).toFixed(2)));
-  const dec = () => setFontScale(s => Math.max(0.9, +(s - 0.1).toFixed(2)));
+  // Escala de fuente
+  const inc = () => setFontScale((s) => Math.min(1.5, +(s + 0.1).toFixed(2)));
+  const dec = () => setFontScale((s) => Math.max(0.9, +(s - 0.1).toFixed(2)));
+
+  // Obtener datos del perfil
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) return;
+      try {
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) setUserData(snap.data());
+      } catch (e) {
+        console.error("Error al obtener datos del usuario:", e);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Cerrar sesión",
+      "¿Seguro que deseas cerrar sesión?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Salir",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await signOut(auth);
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Login" }],
+              });
+            } catch (error) {
+              Alert.alert("Error", "No se pudo cerrar sesión correctamente.");
+            }
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: colors.bg }]}>
-      {/* Barra superior */}
       <NavBar showBack />
-      {/* Espaciador para que el contenido no quede bajo la barra */}
       <View style={{ height: spacer }} />
 
-      {/* Sección: Apariencia (tema claro/oscuro) */}
+      <View style={[styles.section, { backgroundColor: colors.card }]}>
+        <Text style={[styles.title, { color: colors.text }]}>Perfil</Text>
+
+        {userData ? (
+          <View style={styles.profile}>
+            <Image
+              source={{
+                uri:
+                  userData.photoURL ||
+                  "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+              }}
+              style={styles.avatar}
+            />
+            <Text style={[styles.name, { color: colors.text }]}>
+              {userData.name || "Usuario sin nombre"}
+            </Text>
+            <Text style={[styles.email, { color: colors.sub }]}>
+              {userData.email}
+            </Text>
+            <Text style={[styles.uid, { color: colors.sub }]}>
+              ID: {user?.uid}
+            </Text>
+          </View>
+        ) : (
+          <Text style={[{ color: colors.sub }]}>
+            Cargando información del perfil...
+          </Text>
+        )}
+
+        <TouchableOpacity
+          style={[styles.logoutButton, { backgroundColor: colors.primary }]}
+          onPress={handleLogout}
+        >
+          <Text style={styles.logoutText}>Cerrar sesión</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={[styles.section, { backgroundColor: colors.card }]}>
         <Text style={[styles.title, { color: colors.text }]}>Apariencia</Text>
 
@@ -48,21 +131,18 @@ export default function SettingsScreen() {
             </Text>
           </View>
 
-          {/* Interruptor del tema */}
           <Switch
             value={isDark}
             onValueChange={(v) => setTheme(v ? "dark" : "light")}
-            thumbColor={isDark ? "#fff" : "#fff"}
+            thumbColor={"#fff"}
             trackColor={{ false: "#aaa", true: colors.primary }}
           />
         </View>
       </View>
 
-      {/* Sección: Tamaño de texto (escala tipográfica) */}
       <View style={[styles.section, { backgroundColor: colors.card }]}>
         <Text style={[styles.title, { color: colors.text }]}>Tamaño de texto</Text>
 
-        {/* Controles A-/A+ con indicador actual */}
         <View style={[styles.row, { justifyContent: "space-between" }]}>
           <TouchableOpacity style={[styles.btn, { borderColor: colors.primary }]} onPress={dec}>
             <Text style={[styles.btnText, { color: colors.primary }]}>A-</Text>
@@ -77,7 +157,6 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Vista previa con la escala aplicada */}
         <View style={[styles.preview, { borderColor: colors.primary }]}>
           <Text style={[styles.previewTitle, { color: colors.text, fontSize: 20 * fontScale }]}>
             Vista previa
@@ -93,22 +172,17 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-
-  // Tarjetas/secciones de ajustes
   section: {
     marginHorizontal: 16,
     marginBottom: 16,
     padding: 16,
     borderRadius: 12,
   },
-
-  // Títulos y textos base
   title: { fontSize: 18, fontWeight: "800", marginBottom: 12 },
   row: { flexDirection: "row", alignItems: "center", gap: 12 },
   label: { fontSize: 16, fontWeight: "600" },
   sublabel: { fontSize: 13, marginTop: 2 },
 
-  // Botones A-/A+
   btn: {
     paddingVertical: 8,
     paddingHorizontal: 14,
@@ -118,7 +192,6 @@ const styles = StyleSheet.create({
   btnText: { fontSize: 16, fontWeight: "800" },
   scaleText: { fontSize: 16, fontWeight: "700" },
 
-  // Caja de vista previa
   preview: {
     marginTop: 14,
     borderWidth: 1.5,
@@ -127,6 +200,17 @@ const styles = StyleSheet.create({
   },
   previewTitle: { fontWeight: "800", marginBottom: 6 },
   previewBody: { lineHeight: 20 },
+
+  profile: { alignItems: "center" },
+  avatar: { width: 80, height: 80, borderRadius: 40, marginBottom: 10 },
+  name: { fontSize: 18, fontWeight: "700" },
+  email: { fontSize: 14 },
+  uid: { fontSize: 12, marginTop: 4 },
+  logoutButton: {
+    marginTop: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  logoutText: { color: "#fff", fontWeight: "bold", fontSize: 15 },
 });
-
-

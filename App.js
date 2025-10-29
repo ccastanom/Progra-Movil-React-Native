@@ -1,10 +1,16 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { UiProvider } from "./src/context/UiContext"; // Context global (tema, tamaño de texto)
-import MainNavigator from "./src/navigation/AppNavigator"; // Navegación principal
-import { CartProvider } from "./src/context/CartContext"; // Contexto del carrito de compras
+import { UiProvider } from "./src/context/UiContext";
+import MainNavigator from "./src/navigation/AppNavigator";
+import { CartProvider } from "./src/context/CartContext";
+import { LogBox } from "react-native"; 
 
-const Stack = createNativeStackNavigator(); // Stack nativo
+// LogBox.ignoreAllLogs(true);
+// console.log = () => {};
+// console.warn = () => {};
+// //console.error = () => {};
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
