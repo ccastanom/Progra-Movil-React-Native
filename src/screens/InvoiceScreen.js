@@ -4,7 +4,7 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebase/Config";
 import { doc, getDoc } from "firebase/firestore";
-import { money } from "../utils/format";
+import { money } from "../utils/Format";
 import useThemeColors from "../styles/Themes";
 import { useUi } from "../context/UiContext";
 

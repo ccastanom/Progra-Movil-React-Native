@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity,} from "react
 import { useUi } from "../context/UiContext";
 import useThemeColors from "../styles/Themes";
 import { useCart } from "../context/CartContext";
-import { money } from "../utils/format";
+import { money } from "../utils/Format";
 import { useNavigation } from "@react-navigation/native";
 import NavBar from "../components/NavBar";
 

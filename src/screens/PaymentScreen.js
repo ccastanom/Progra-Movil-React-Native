@@ -3,7 +3,7 @@ import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useCart } from "../context/CartContext";
-import { money } from "../utils/format";
+import { money } from "../utils/Format";
 import { useUi } from "../context/UiContext";
 import useThemeColors from "../styles/Themes";
 import { db } from "../firebase/Config";
