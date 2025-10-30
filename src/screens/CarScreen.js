@@ -68,7 +68,7 @@ export default function Car() {
               </View>
             )}
 
-            {/* Información del producto */}
+            {/* Informacion del producto */}
             <View style={styles.info}>
               <Text
                 style={[

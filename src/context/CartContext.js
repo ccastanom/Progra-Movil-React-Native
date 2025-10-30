@@ -16,7 +16,6 @@ export const CartProvider = ({ children }) => {
           : item
       );
     } else {
-      // 🧩 Aseguramos que la imagen sea string válida
       const image =
         typeof product.image === "string" && product.image.trim() !== ""
           ? product.image

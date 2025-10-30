@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity,} from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
-import { db } from "../firebase/config";
+import { db } from "../firebase/Config";
 import { doc, getDoc } from "firebase/firestore";
 import { money } from "../utils/format";
 import useThemeColors from "../styles/Themes";

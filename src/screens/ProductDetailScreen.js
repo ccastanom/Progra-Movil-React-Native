@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Button, Alert, Image, StyleSheet, ScrollView, TouchableOpacity,} from "react-native";
 import NavBar from "../components/NavBar";
-import { money } from "../utils/format";
+import { money } from "../utils/Format";
 import useThemeColors from "../styles/Themes";
 import { useCart } from "../context/CartContext";
 import { useUi } from "../context/UiContext";
@@ -62,7 +62,7 @@ export default function ProductDetailScreen({ route, navigation }) {
         Precio: {money(product.price)}
       </Text>
 
-      {/* Descripción */}
+      {/* Descripcion */}
       {product.description ? (
         <Text
           style={[

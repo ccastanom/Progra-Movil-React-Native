@@ -5,7 +5,7 @@ import useThemeColors from "../styles/Themes";
 
 // Firebase
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { app, db } from "../firebase/config";
+import { app, db } from "../firebase/Config";
 import { doc, setDoc } from "firebase/firestore";
 
 // Pantalla de registro
@@ -19,7 +19,7 @@ export default function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Función para manejar el registro
+  // Funcion para manejar el registro
   const handleRegister = async () => {
     if (!name || !email || !password) {
       Alert.alert("Error", "Por favor completa todos los campos");

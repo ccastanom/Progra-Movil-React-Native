@@ -7,11 +7,11 @@ import {
   Alert,
 } from "react-native";
 import { useUi } from "../context/UiContext";
-import useThemeColors from "../styles/Themes"; // 👈 Importa tu hook de temas
+import useThemeColors from "../styles/Themes";
 
 export default function CheckoutScreen({ route, navigation }) {
   const { fontScale } = useUi();
-  const { colors, isDark } = useThemeColors(); // 👈 Obtiene los colores del tema actual
+  const { colors, isDark } = useThemeColors();
   const { total } = route.params;
   const [accepted, setAccepted] = useState(false);
 
