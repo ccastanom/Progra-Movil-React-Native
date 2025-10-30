@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity,} from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
-import { db } from "../firebase/Config";
+import { db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import { money } from "../utils/format";
-import useThemeColors from "../styles/Themes";
+import useThemeColors from "../styles/themes";
 import { useUi } from "../context/UiContext";
 
 export default function InvoiceScreen() {
@@ -62,10 +69,7 @@ export default function InvoiceScreen() {
 
   return (
     <ScrollView
-      contentContainerStyle={[
-        styles.container,
-        { backgroundColor: colors.bg },
-      ]}
+      contentContainerStyle={[styles.container, { backgroundColor: colors.bg }]}
     >
       <View
         style={[
@@ -95,36 +99,61 @@ export default function InvoiceScreen() {
             },
           ]}
         >
-          <Text style={[styles.label, { color: colors.subtext, fontSize: 13 * fontScale }]}>
+          <Text
+            style={[
+              styles.label,
+              { color: colors.subtext, fontSize: 13 * fontScale },
+            ]}
+          >
             Nombre
           </Text>
-          <Text style={[styles.value, { color: colors.text, fontSize: 16 * fontScale }]}>
+          <Text
+            style={[
+              styles.value,
+              { color: colors.text, fontSize: 16 * fontScale },
+            ]}
+          >
             {invoice.name}
           </Text>
 
-          <Text style={[styles.label, { color: colors.subtext, fontSize: 13 * fontScale }]}>
+          <Text
+            style={[
+              styles.label,
+              { color: colors.subtext, fontSize: 13 * fontScale },
+            ]}
+          >
             Dirección
           </Text>
-          <Text style={[styles.value, { color: colors.text, fontSize: 16 * fontScale }]}>
+          <Text
+            style={[
+              styles.value,
+              { color: colors.text, fontSize: 16 * fontScale },
+            ]}
+          >
             {invoice.address}
           </Text>
 
-          <Text style={[styles.label, { color: colors.subtext, fontSize: 13 * fontScale }]}>
+          <Text
+            style={[
+              styles.label,
+              { color: colors.subtext, fontSize: 13 * fontScale },
+            ]}
+          >
             Fecha
           </Text>
-          <Text style={[styles.value, { color: colors.text, fontSize: 16 * fontScale }]}>
+          <Text
+            style={[
+              styles.value,
+              { color: colors.text, fontSize: 16 * fontScale },
+            ]}
+          >
             {invoice.createdAt?.toDate
               ? invoice.createdAt.toDate().toLocaleString()
               : "—"}
           </Text>
         </View>
 
-        <View
-          style={[
-            styles.divider,
-            { backgroundColor: colors.border },
-          ]}
-        />
+        <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
         <Text
           style={[
@@ -138,22 +167,27 @@ export default function InvoiceScreen() {
         <View style={styles.itemContainer}>
           {invoice.items.map((item, index) => (
             <View key={index} style={styles.itemRow}>
-              <Text style={[styles.itemText, { color: colors.text, fontSize: 16 * fontScale }]}>
+              <Text
+                style={[
+                  styles.itemText,
+                  { color: colors.text, fontSize: 16 * fontScale },
+                ]}
+              >
                 {item.name} (x{item.quantity})
               </Text>
-              <Text style={[styles.itemText, { color: colors.text, fontSize: 16 * fontScale }]}>
+              <Text
+                style={[
+                  styles.itemText,
+                  { color: colors.text, fontSize: 16 * fontScale },
+                ]}
+              >
                 {money(item.price * item.quantity)}
               </Text>
             </View>
           ))}
         </View>
 
-        <View
-          style={[
-            styles.divider,
-            { backgroundColor: colors.border },
-          ]}
-        />
+        <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
         <Text
           style={[
@@ -175,18 +209,10 @@ export default function InvoiceScreen() {
 
         {/* Botón para volver al inicio */}
         <TouchableOpacity
-          style={[
-            styles.backButton,
-            { backgroundColor: colors.primary },
-          ]}
+          style={[styles.backButton, { backgroundColor: colors.primary }]}
           onPress={() => navigation.navigate("Principal")}
         >
-          <Text
-            style={[
-              styles.backButtonText,
-              { fontSize: 16 * fontScale },
-            ]}
-          >
+          <Text style={[styles.backButtonText, { fontSize: 16 * fontScale }]}>
             Volver al inicio
           </Text>
         </TouchableOpacity>

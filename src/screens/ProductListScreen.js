@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
-import {View, Text, FlatList, TouchableOpacity, Image, ImageBackground, StyleSheet, Dimensions, ActivityIndicator,} from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/Config";
+import { db } from "../firebase/config";
 import NavBar from "../components/NavBar";
-import useThemeColors from "../styles/Themes";
+import useThemeColors from "../styles/themes";
 import { useUi } from "../context/UiContext";
 
 const { width } = Dimensions.get("window");
@@ -27,9 +37,7 @@ export default function ProductListScreen({ navigation }) {
         }));
 
         // Mezclar los productos aleatoriamente
-        const randomProducts = list
-          .sort(() => Math.random() - 0.5)
-          .slice(0, 4);
+        const randomProducts = list.sort(() => Math.random() - 0.5).slice(0, 4);
 
         setProducts(randomProducts);
       } catch (error) {
@@ -51,7 +59,10 @@ export default function ProductListScreen({ navigation }) {
       ]}
     >
       {item.image || item.imageUrl ? (
-        <Image source={{ uri: item.image || item.imageUrl }} style={styles.thumb} />
+        <Image
+          source={{ uri: item.image || item.imageUrl }}
+          style={styles.thumb}
+        />
       ) : (
         <View
           style={[

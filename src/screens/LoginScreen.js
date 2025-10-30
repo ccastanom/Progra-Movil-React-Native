@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import {StyleSheet, Text, View, TouchableOpacity, ImageBackground, TextInput, Alert, ActivityIndicator,
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ImageBackground,
+  TextInput,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
-import useThemeColors from "../styles/Themes";
+import useThemeColors from "../styles/themes";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../firebase/Config";
+import { app } from "../firebase/config";
 
 export default function LoginScreen({ navigation }) {
   const { colors } = useThemeColors();
@@ -16,7 +24,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   // Manejar inicio de sesión
   const handleLogin = async () => {
     // Modo desarrollo
@@ -40,7 +48,7 @@ export default function LoginScreen({ navigation }) {
       console.error("Error al iniciar sesión:", error);
       let message = "Pero no te preocupes, no es tu culpa.";
       let msm = "Ocurrio un error al iniciar sesión.";
-      
+
       // Manejo de errores comunes
       if (error.code === "auth/user-not-found") {
         msm = "Usuario no encontrado.";
@@ -59,7 +67,8 @@ export default function LoginScreen({ navigation }) {
         message = "Error de conexión. Revisa tu internet.";
       } else if (error.code === "auth/user-disabled") {
         msm = "Cuenta deshabilitada.";
-        message = "Oops, desafortunadamente tu cuenta ha sido deshabilitada. Contacta soporte.";
+        message =
+          "Oops, desafortunadamente tu cuenta ha sido deshabilitada. Contacta soporte.";
       }
 
       Alert.alert(msm, message);

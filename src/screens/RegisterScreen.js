@@ -1,11 +1,24 @@
 import React, { useState } from "react";
-import {StyleSheet, Text, View, TouchableOpacity, TextInput, ImageBackground, Alert, ActivityIndicator,} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  ImageBackground,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
-import useThemeColors from "../styles/Themes";
+import useThemeColors from "../styles/themes";
 
 // Firebase
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { app, db } from "../firebase/Config";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { app, db } from "../firebase/config";
 import { doc, setDoc } from "firebase/firestore";
 
 // Pantalla de registro
@@ -29,7 +42,11 @@ export default function RegisterScreen({ navigation }) {
     // Registro con Firebase Auth
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
 
       await updateProfile(user, { displayName: name });
@@ -47,8 +64,7 @@ export default function RegisterScreen({ navigation }) {
       let message = "Ocurrió un error al registrar";
       if (error.code === "auth/email-already-in-use")
         message = "El correo ya está registrado";
-      if (error.code === "auth/invalid-email")
-        message = "Correo inválido";
+      if (error.code === "auth/invalid-email") message = "Correo inválido";
       if (error.code === "auth/weak-password")
         message = "La contraseña es muy débil";
       Alert.alert("Error", message);
@@ -61,7 +77,6 @@ export default function RegisterScreen({ navigation }) {
   return (
     // Contenedor principal
     <View style={[styles.container, { backgroundColor: colors.bg }]}>
-
       {/* NavBar */}
       <View style={[styles.navBar, { backgroundColor: colors.card }]}>
         <View style={styles.logoWrap}>
@@ -78,7 +93,9 @@ export default function RegisterScreen({ navigation }) {
         imageStyle={{ resizeMode: "cover" }}
       >
         <View style={styles.headerTextWrap}>
-          <Text style={styles.headerText}>Crea tu cuenta y empieza a disfrutar 😋</Text>
+          <Text style={styles.headerText}>
+            Crea tu cuenta y empieza a disfrutar 😋
+          </Text>
         </View>
       </ImageBackground>
 
@@ -142,10 +159,15 @@ export default function RegisterScreen({ navigation }) {
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ marginTop: 12 }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Login")}
+          style={{ marginTop: 12 }}
+        >
           <Text style={{ color: colors.text }}>
             ¿Ya tienes cuenta?{" "}
-            <Text style={{ color: colors.primary, fontWeight: "bold" }}>Inicia sesión</Text>
+            <Text style={{ color: colors.primary, fontWeight: "bold" }}>
+              Inicia sesión
+            </Text>
           </Text>
         </TouchableOpacity>
 

@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView,
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ScrollView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useUi } from "../context/UiContext";
-import useThemeColors from "../styles/Themes";
-import { db } from "../firebase/Config";
+import useThemeColors from "../styles/themes";
+import { db } from "../firebase/config";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
@@ -41,7 +48,10 @@ export default function PaymentScreen() {
     // Validar formato MM/AA
     const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
     if (!expiryRegex.test(expiry)) {
-      Alert.alert("Fecha inválida", "Usa el formato MM/AA (por ejemplo 07/28).");
+      Alert.alert(
+        "Fecha inválida",
+        "Usa el formato MM/AA (por ejemplo 07/28)."
+      );
       return false;
     }
 
@@ -182,7 +192,10 @@ export default function PaymentScreen() {
         Nombre completo
       </Text>
       <TextInput
-        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
+        style={[
+          styles.input,
+          { backgroundColor: colors.card, color: colors.text },
+        ]}
         placeholder="Ej: Juan Pérez"
         placeholderTextColor={colors.subtext}
         value={name}
@@ -193,7 +206,10 @@ export default function PaymentScreen() {
         Número de tarjeta
       </Text>
       <TextInput
-        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
+        style={[
+          styles.input,
+          { backgroundColor: colors.card, color: colors.text },
+        ]}
         placeholder="**** **** **** 1234"
         placeholderTextColor={colors.subtext}
         keyboardType="numeric"
@@ -208,7 +224,10 @@ export default function PaymentScreen() {
             Expira (MM/AA)
           </Text>
           <TextInput
-            style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
+            style={[
+              styles.input,
+              { backgroundColor: colors.card, color: colors.text },
+            ]}
             placeholder="MM/AA"
             placeholderTextColor={colors.subtext}
             value={expiry}
@@ -221,7 +240,10 @@ export default function PaymentScreen() {
         <View style={{ flex: 1 }}>
           <Text style={[styles.label, { color: colors.subtext }]}>CVV</Text>
           <TextInput
-            style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
+            style={[
+              styles.input,
+              { backgroundColor: colors.card, color: colors.text },
+            ]}
             placeholder="***"
             placeholderTextColor={colors.subtext}
             secureTextEntry
@@ -235,7 +257,10 @@ export default function PaymentScreen() {
 
       <Text style={[styles.label, { color: colors.subtext }]}>Dirección</Text>
       <TextInput
-        style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
+        style={[
+          styles.input,
+          { backgroundColor: colors.card, color: colors.text },
+        ]}
         placeholder="Ej: Calle falsa #12-34"
         placeholderTextColor={colors.subtext}
         value={address}
@@ -266,7 +291,10 @@ export default function PaymentScreen() {
       </View>
 
       <Text
-        style={[styles.total, { color: colors.primary, fontSize: 18 * fontScale }]}
+        style={[
+          styles.total,
+          { color: colors.primary, fontSize: 18 * fontScale },
+        ]}
       >
         Total a pagar: {money(total)}
       </Text>
@@ -280,7 +308,10 @@ export default function PaymentScreen() {
         disabled={loading}
       >
         <Text
-          style={[styles.buttonText, { color: "#fff", fontSize: 16 * fontScale }]}
+          style={[
+            styles.buttonText,
+            { color: "#fff", fontSize: 16 * fontScale },
+          ]}
         >
           {loading ? "Procesando..." : "Confirmar pago"}
         </Text>

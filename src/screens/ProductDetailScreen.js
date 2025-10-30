@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import { View, Text, Button, Alert, Image, StyleSheet, ScrollView, TouchableOpacity,} from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  Alert,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import NavBar from "../components/NavBar";
-import { money } from "../utils/Format";
-import useThemeColors from "../styles/Themes";
+import { money } from "../utils/format";
+import useThemeColors from "../styles/themes";
 import { useCart } from "../context/CartContext";
 import { useUi } from "../context/UiContext";
 
@@ -44,10 +53,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
       {/* Nombre */}
       <Text
-        style={[
-          styles.title,
-          { color: colors.text, fontSize: 22 * fontScale },
-        ]}
+        style={[styles.title, { color: colors.text, fontSize: 22 * fontScale }]}
       >
         {product.name}
       </Text>
@@ -102,10 +108,7 @@ export default function ProductDetailScreen({ route, navigation }) {
 
       {/* Total */}
       <Text
-        style={[
-          styles.total,
-          { color: colors.text, fontSize: 18 * fontScale },
-        ]}
+        style={[styles.total, { color: colors.text, fontSize: 18 * fontScale }]}
       >
         Total: {money(total)}
       </Text>
@@ -120,7 +123,10 @@ export default function ProductDetailScreen({ route, navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.actionButton, { backgroundColor: colors.secondary || "#4CAF50" }]}
+          style={[
+            styles.actionButton,
+            { backgroundColor: colors.secondary || "#4CAF50" },
+          ]}
           onPress={handleBuyNow}
         >
           <Text style={styles.actionText}>Comprar ahora</Text>
