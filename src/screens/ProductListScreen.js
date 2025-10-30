@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {View, Text, FlatList, TouchableOpacity, Image, ImageBackground, StyleSheet, Dimensions, ActivityIndicator,} from "react-native";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { db } from "../firebase/Config";
 import NavBar from "../components/NavBar";
 import useThemeColors from "../styles/Themes";
 import { useUi } from "../context/UiContext";

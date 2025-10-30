@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useUi } from "../context/UiContext";
 import useThemeColors from "../styles/Themes";
-import { db } from "../firebase/config";
+import { db } from "../firebase/Config";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 

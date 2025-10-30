@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, TouchableOpacity, ImageBackground, TextInput, Al
 import SvgIcon from "../../assets/SvgIcon";
 import useThemeColors from "../styles/Themes";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../firebase/config";
+import { app } from "../firebase/Config";
 
 export default function LoginScreen({ navigation }) {
   const { colors } = useThemeColors();

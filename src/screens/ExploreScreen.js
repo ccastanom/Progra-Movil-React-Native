@@ -13,7 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import NavBar from "../components/NavBar";
 import { useUi } from "../context/UiContext";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/config"; // 👈 Usa tu archivo real
+import { db } from "../firebase/Config";
 
 export default function ExploreScreen({ navigation }) {
   const { theme, fontScale } = useUi();
@@ -118,7 +118,7 @@ export default function ExploreScreen({ navigation }) {
     <View style={{ flex: 1, backgroundColor: dark ? "#121212" : "#fafafa" }}>
       <NavBar showBack={true} />
 
-      {/* Campo de búsqueda */}
+      {/* Campo de busqueda */}
       <View style={styles.searchContainer}>
         <View
           style={[
