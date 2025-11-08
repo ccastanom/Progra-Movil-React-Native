@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity,} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useUi } from "../context/UiContext";
 import useThemeColors from "../styles/Themes";
 import { useCart } from "../context/CartContext";

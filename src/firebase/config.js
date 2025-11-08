@@ -6,26 +6,31 @@ import {
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID,
+} from "@env";
 
-// Configuración de Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyArmD0Hv-IjVya0NzMkv8-W_WQrxqPYWHg",
-  authDomain: "querollo-b7d3a.firebaseapp.com",
-  projectId: "querollo-b7d3a",
-  storageBucket: "querollo-b7d3a.firebasestorage.com",
-  messagingSenderId: "398011177601",
-  appId: "1:398011177601:web:f03a8e41605b29c649cb80"
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
 };
 
-// Evitar inicialización duplicada
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Crear Auth con persistencia para React Native
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 });
 
-// Firestore
 const db = getFirestore(app);
 const storage = getStorage(app);
+
 export { app, auth, db, storage };

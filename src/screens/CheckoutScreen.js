@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useUi } from "../context/UiContext";
 import useThemeColors from "../styles/Themes";
 
@@ -85,9 +79,7 @@ export default function CheckoutScreen({ route, navigation }) {
           style={[
             styles.button,
             {
-              backgroundColor: accepted
-                ? colors.primary
-                : colors.border,
+              backgroundColor: accepted ? colors.primary : colors.border,
             },
           ]}
           disabled={!accepted}

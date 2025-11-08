@@ -17,8 +17,11 @@
     "expo": "^54.0.21",
     "expo-status-bar": "~3.0.8",
     "firebase": "^12.4.0",
+    "firebase-admin": "^13.6.0",
+    "minimist": "^1.2.8",
     "react": "19.1.0",
     "react-native": "^0.81.5",
+    "react-native-dotenv": "^3.4.11",
     "react-native-html-to-pdf": "^1.3.0",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
@@ -26,8 +29,23 @@
   },
   "private": true,
   "devDependencies": {
+    "@babel/preset-flow": "^7.27.1",
+    "@babel/preset-typescript": "^7.28.5",
     "@react-native-community/cli": "^20.0.2",
     "@react-native/metro-config": "^0.82.1",
+    "babel-preset-expo": "^54.0.7",
     "react-native-svg-transformer": "^1.5.1"
-  }
+  },
+  "description": "Que Rollo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ccastanom/Progra-Movil-React-Native.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ccastanom/Progra-Movil-React-Native/issues"
+  },
+  "homepage": "https://github.com/ccastanom/Progra-Movil-React-Native#readme"
 }
