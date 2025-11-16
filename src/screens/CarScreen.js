@@ -1,6 +1,13 @@
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity,} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { useUi } from "../context/UiContext";
-import useThemeColors from "../styles/Themes";
+import useThemeColors from "../styles/themes";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/format";
 import { useNavigation } from "@react-navigation/native";
@@ -68,7 +75,7 @@ export default function Car() {
               </View>
             )}
 
-            {/* Información del producto */}
+            {/* Informacion del producto */}
             <View style={styles.info}>
               <Text
                 style={[

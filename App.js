@@ -5,10 +5,10 @@ import MainNavigator from "./src/navigation/AppNavigator";
 import { CartProvider } from "./src/context/CartContext";
 import { LogBox } from "react-native"; 
 
-// LogBox.ignoreAllLogs(true);
-// console.log = () => {};
-// console.warn = () => {};
-// //console.error = () => {};
+LogBox.ignoreAllLogs(true);
+console.log = () => {};
+console.warn = () => {};
+console.error = () => {};
 
 const Stack = createNativeStackNavigator();
 

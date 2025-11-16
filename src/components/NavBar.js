@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
 import { useNavigation } from "@react-navigation/native";
-import { StatusBar, Platform } from "react-native";
 export default function NavBar({ showBack = false, hideMenu = false }) {
   const navigation = useNavigation();
 

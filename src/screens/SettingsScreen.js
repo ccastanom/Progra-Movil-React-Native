@@ -1,18 +1,10 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Switch,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
+import {View, Text, StyleSheet, Switch, TouchableOpacity, Image, Alert,} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import NavBar from "../components/NavBar";
 import { useUi } from "../context/UiContext";
 import { getAuth, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { db } from "../firebase/Config";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
