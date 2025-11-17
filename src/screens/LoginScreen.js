@@ -13,6 +13,9 @@ import SvgIcon from "../../assets/SvgIcon";
 import useThemeColors from "../styles/themes";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase/config";
+import { sendWelcomeNotification, scheduleRecommendationsNotification,} from "../utils/notifications";
+
+
 
 export default function LoginScreen({ navigation }) {
   const { colors } = useThemeColors();
@@ -42,8 +45,28 @@ export default function LoginScreen({ navigation }) {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      Alert.alert("Bienvenido a Que Rollo ❤️", "Inicio de sesión exitoso");
+      //Alert.alert("Bienvenido a Que Rollo ❤", "Inicio de sesión exitoso");
+      
+
       navigation.replace("Principal");
+
+      
+
+
+      try {
+      sendWelcomeNotification(email).catch((err) =>
+        console.log("Error en notificación de bienvenida:", err)
+      );
+
+      scheduleRecommendationsNotification().catch((err) =>
+        console.log("Error en notificación de recomendados:", err)
+      );
+      } catch (e) {
+      console.log("Error general al disparar notificaciones:", e);
+      }
+
+
+
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
       let message = "Pero no te preocupes, no es tu culpa.";
@@ -223,5 +246,5 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   logoWrap: { justifyContent: "center", alignItems: "center" },
-  brand: { fontSize: 18, fontWeight: "800" },
+  brand: { fontSize: 18, fontWeight: "800" },
 });

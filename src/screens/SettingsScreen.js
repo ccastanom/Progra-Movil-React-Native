@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 import { useUi } from "../context/UiContext";
 import { getAuth, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase/Config";
+import { db } from "../firebase/config";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
@@ -94,9 +94,9 @@ export default function SettingsScreen() {
             <Text style={[styles.email, { color: colors.sub }]}>
               {userData.email}
             </Text>
-            <Text style={[styles.uid, { color: colors.sub }]}>
+            {/* < Text style={[styles.uid, { color: colors.sub }]}>
               ID: {user?.uid}
-            </Text>
+            </Text > */}
           </View>
         ) : (
           <Text style={[{ color: colors.sub }]}>
