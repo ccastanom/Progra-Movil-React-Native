@@ -16,6 +16,8 @@ import useThemeColors from "../styles/themes";
 import { db } from "../firebase/config";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { sendOrderConfirmedNotification } from "../utils/notifications";
+
 
 export default function PaymentScreen() {
   const navigation = useNavigation();
@@ -109,6 +111,15 @@ export default function PaymentScreen() {
         })),
         createdAt: serverTimestamp(),
       });
+
+      
+
+      sendOrderConfirmedNotification(total).catch((err) =>
+        console.log("Error en notificación de pedido:", err)
+      );
+
+
+
 
       setTimeout(() => {
         setLoading(false);

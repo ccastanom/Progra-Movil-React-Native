@@ -19,7 +19,7 @@ export async function sendOrderConfirmedNotification(total) {
 
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "🎉 ¡Pedido confirmado!",
+      title: "🎉 ¡Pedido confirmado, estamos preparando tu orden!",
       body: bodyText,
     },
     trigger: { seconds: 2}, 
@@ -31,7 +31,7 @@ export async function scheduleRecommendationsNotification() {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "🤤 Recomendados para ti",
-      body: "Mira los nuevos rollos que tenemos hoy para ti.",
+      body: "Mira los nuevos rollos que tenemos hoy.",
     },
     trigger: { seconds: 30},
   });
