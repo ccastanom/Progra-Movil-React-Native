@@ -1,4 +1,6 @@
 import { useUi } from "../context/UiContext";
+import { FontFamily } from "./fonts";
+
 
 export default function useThemeColors() {
   const { theme } = useUi();
@@ -21,6 +23,8 @@ export default function useThemeColors() {
         border: "#dddddd",
         primary: "#E91E63",
       };
+
+  const fonts = FontFamily;
 
   return { colors, isDark };
 }

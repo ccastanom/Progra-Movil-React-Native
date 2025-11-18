@@ -3,34 +3,30 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { UiProvider } from "./src/context/UiContext";
 import MainNavigator from "./src/navigation/AppNavigator";
 import { CartProvider } from "./src/context/CartContext";
-import { LogBox, Alert, Platform } from "react-native"; 
-import { useEffect } from "react";
+import { LogBox, Alert, Platform, Text } from "react-native";
+import { useEffect, useState } from "react";
 
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
+import * as Font from "expo-font";
 
 LogBox.ignoreAllLogs(true);
 console.log = () => {};
 console.warn = () => {};
 console.error = () => {};
 
-const Stack = createNativeStackNavigator();
-
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: false,    
-    shouldShowBanner: true,     
-    shouldShowList: true,       
+    shouldShowAlert: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
 
-
 async function registerForPushNotificationsAsync() {
-  if (!Device.isDevice) {
-    return;
-  }
+  if (!Device.isDevice) return;
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
@@ -41,14 +37,10 @@ async function registerForPushNotificationsAsync() {
   }
 
   if (finalStatus !== "granted") {
-    Alert.alert(
-      "Alert",
-      "No se otorgaron permisos para notificaciones."
-    );
+    Alert.alert("Alert", "No se otorgaron permisos para notificaciones.");
     return;
   }
 
-  // en otro push real se usa el token
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
       name: "default",
@@ -58,9 +50,44 @@ async function registerForPushNotificationsAsync() {
 }
 
 export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
   useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        BalooRegular: require("./assets/fonts/Baloo2-Regular.ttf"),
+        BalooMedium: require("./assets/fonts/Baloo2-Medium.ttf"),
+        BalooSemi: require("./assets/fonts/Baloo2-SemiBold.ttf"),
+        BalooBold: require("./assets/fonts/Baloo2-Bold.ttf"),
+        BalooExtra: require("./assets/fonts/Baloo2-ExtraBold.ttf"),
+        CrystalTitle: require("./assets/fonts/Crystal Radio Kit.otf"),
+      });
+
+      //  Fuente global
+      Text.defaultProps = Text.defaultProps || {};
+      Text.defaultProps.style = {
+        fontFamily: "BalooRegular",
+      };
+
+      const oldRender = Text.render;
+      Text.render = function (...args) {
+        const origin = oldRender.call(this, ...args);
+        return React.cloneElement(origin, {
+          style: [
+            { fontFamily: "BalooRegular"}, // defecto
+            origin.props.style, // respeta la personalizacion
+          ],
+        });
+      };
+
+      setFontsLoaded(true);
+    }
+
+    loadFonts();
     registerForPushNotificationsAsync();
   }, []);
+
+  if (!fontsLoaded) return null;
 
   return (
     <SafeAreaProvider>
@@ -72,3 +99,4 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
+

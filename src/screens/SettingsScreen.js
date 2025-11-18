@@ -8,6 +8,7 @@ import { db } from "../firebase/config";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
+
 const BAR_HEIGHT = 56;
 
 export default function SettingsScreen() {

@@ -15,6 +15,8 @@ import useThemeColors from "../styles/themes";
 import { useCart } from "../context/CartContext";
 import { useUi } from "../context/UiContext";
 
+
+
 export default function ProductDetailScreen({ route, navigation }) {
   const { colors } = useThemeColors();
   const { fontScale } = useUi();

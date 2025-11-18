@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useUi } from "../context/UiContext";
 import useThemeColors from "../styles/themes";
 
+
 export default function CheckoutScreen({ route, navigation }) {
   const { fontScale } = useUi();
   const { colors, isDark } = useThemeColors();

@@ -7,12 +7,14 @@ export function UiProvider({ children }) {
   const [theme, setTheme] = useState("light");   // Estado del tema: "light" | "dark"
   const [fontScale, setFontScale] = useState(1); // Escala de fuente: 1 = 100%
 
+  const normalizedFontScale = Math.max(fontScale, 1);
+
   const value = useMemo(() => ({
     theme,
     setTheme,
-    fontScale,
+    fontScale: normalizedFontScale,
     setFontScale,
-  }), [theme, fontScale]);
+  }), [theme, normalizedFontScale]);
 
   return <UiContext.Provider value={value}>{children}</UiContext.Provider>;
 }

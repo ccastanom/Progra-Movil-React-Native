@@ -14,7 +14,7 @@ import useThemeColors from "../styles/themes";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase/config";
 import { sendWelcomeNotification, scheduleRecommendationsNotification,} from "../utils/notifications";
-
+import {FontFamily as fonts} from "../styles/fonts";
 
 
 export default function LoginScreen({ navigation }) {
@@ -107,7 +107,7 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.logoWrap}>
           <SvgIcon width={40} height={40} />
         </View>
-        <Text style={[styles.brand, { color: colors.text }]}>QUE ROLLO</Text>
+        <Text style={[styles.brand, { color: colors.primary }]}>QUE ROLLO</Text>
         <View style={{ width: 28 }} />
       </View>
 
@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
     textAlign: "center",
+    fontFamily: fonts.extrabold,
   },
   content: { flex: 1, alignItems: "center", padding: 20, width: "100%" },
   input: {
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  buttonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  buttonText: { color: "#fff", fontSize: 19, fontFamily: fonts.bold, },
   imgEnd: { opacity: 0.5, marginTop: 30 },
   navBar: {
     height: 75,
@@ -246,5 +247,5 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   logoWrap: { justifyContent: "center", alignItems: "center" },
-  brand: { fontSize: 18, fontWeight: "800" },
+  brand: { fontSize: 24, fontWeight:"800", fontFamily: fonts.extrabold, letterSpacing: 1, },
 });
