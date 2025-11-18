@@ -12,10 +12,13 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/Format";
 import { useUi } from "../context/UiContext";
-import useThemeColors from "../styles/Themes";
-import { db } from "../firebase/Config";
+import useThemeColors from "../styles/themes";
+import { db } from "../firebase/config";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { sendOrderConfirmedNotification } from "../utils/notifications";
+
+
 
 export default function PaymentScreen() {
   const navigation = useNavigation();
@@ -109,6 +112,15 @@ export default function PaymentScreen() {
         })),
         createdAt: serverTimestamp(),
       });
+
+      
+
+      sendOrderConfirmedNotification(total).catch((err) =>
+        console.log("Error en notificación de pedido:", err)
+      );
+
+
+
 
       setTimeout(() => {
         setLoading(false);

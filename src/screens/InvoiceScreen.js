@@ -9,11 +9,17 @@ import {
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
-import { db } from "../firebase/Config";
+import { db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
+<<<<<<< HEAD
 import { money } from "../utils/Format";
 import useThemeColors from "../styles/Themes";
+=======
+import { money } from "../utils/format";
+import useThemeColors from "../styles/themes";
+>>>>>>> 472039997f10b0868e6b3510de0ea15d78ff4094
 import { useUi } from "../context/UiContext";
+
 
 export default function InvoiceScreen() {
   const route = useRoute();

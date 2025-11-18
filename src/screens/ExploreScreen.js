@@ -13,7 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import NavBar from "../components/NavBar";
 import { useUi } from "../context/UiContext";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/Config";
+import { db } from "../firebase/config";
 
 export default function ExploreScreen({ navigation }) {
   const { theme, fontScale } = useUi();

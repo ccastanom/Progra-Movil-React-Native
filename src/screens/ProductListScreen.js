@@ -1,3 +1,4 @@
+// src/screens/ProductListScreen.js
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -11,10 +12,11 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase/Config";
+import { db } from "../firebase/config";
 import NavBar from "../components/NavBar";
-import useThemeColors from "../styles/Themes";
+import useThemeColors from "../styles/themes";
 import { useUi } from "../context/UiContext";
+import { FontFamily as fonts } from "../styles/fonts";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width / 2 - 24;
@@ -37,7 +39,9 @@ export default function ProductListScreen({ navigation }) {
         }));
 
         // Mezclar los productos aleatoriamente
-        const randomProducts = list.sort(() => Math.random() - 0.5).slice(0, 4);
+        const randomProducts = list
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 4);
 
         setProducts(randomProducts);
       } catch (error) {
@@ -70,33 +74,45 @@ export default function ProductListScreen({ navigation }) {
             { backgroundColor: colors.border, justifyContent: "center" },
           ]}
         >
-          <Text style={{ color: colors.subtext, textAlign: "center" }}>
+          <Text
+            style={{
+              color: colors.subtext,
+              textAlign: "center",
+              fontFamily: fonts.regular,
+              fontSize: 14 * fontScale,
+            }}
+          >
             Sin imagen
           </Text>
         </View>
       )}
 
+      {/* Nombre del producto */}
       <Text
         style={[
           styles.cardTitle,
-          { color: colors.text, fontSize: 14 * fontScale },
+          { color: colors.text, fontSize: 18 * fontScale },
         ]}
         numberOfLines={1}
       >
         {item.name || "Producto"}
       </Text>
+
+      {/* Precio */}
       <Text
         style={[
           styles.cardPrice,
-          { color: colors.subtext, fontSize: 13 * fontScale },
+          { color: colors.subtext, fontSize: 16 * fontScale },
         ]}
       >
         ${item.price?.toLocaleString() || "0"}
       </Text>
+
+      {/* Ver detalle */}
       <Text
         style={[
           styles.cardLink,
-          { color: colors.primary, fontSize: 13 * fontScale },
+          { color: colors.primary, fontSize: 16 * fontScale },
         ]}
       >
         Ver detalle
@@ -115,7 +131,14 @@ export default function ProductListScreen({ navigation }) {
         }}
       >
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={{ color: colors.subtext, marginTop: 10 }}>
+        <Text
+          style={{
+            color: colors.subtext,
+            marginTop: 10,
+            fontFamily: fonts.regular,
+            fontSize: 10 * fontScale,
+          }}
+        >
           Cargando productos...
         </Text>
       </View>
@@ -156,7 +179,11 @@ export default function ProductListScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   headerImage: { height: 150, justifyContent: "flex-end" },
-  headerTitle: { fontWeight: "800", padding: 16 },
+  headerTitle: {
+    padding: 16,
+    fontFamily: fonts.extrabold,
+
+  },
 
   card: {
     width: CARD_WIDTH,
@@ -179,15 +206,17 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cardTitle: {
-    fontWeight: "bold",
     textAlign: "center",
+    fontFamily: fonts.bold,
   },
   cardPrice: {
     marginTop: 2,
+    fontFamily: fonts.medium,
   },
   cardLink: {
     marginTop: 4,
     textDecorationLine: "underline",
-    fontWeight: "600",
+    fontFamily: fonts.semibold,
   },
 });
+

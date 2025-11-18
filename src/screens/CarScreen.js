@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useUi } from "../context/UiContext";
-import useThemeColors from "../styles/Themes";
+import useThemeColors from "../styles/themes";
 import { useCart } from "../context/CartContext";
 import { money } from "../utils/Format";
 import { useNavigation } from "@react-navigation/native";

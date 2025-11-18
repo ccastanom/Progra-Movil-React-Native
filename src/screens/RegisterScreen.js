@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import SvgIcon from "../../assets/SvgIcon";
-import useThemeColors from "../styles/Themes";
+import useThemeColors from "../styles/themes";
 
 // Firebase
 import {
@@ -18,7 +18,11 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+<<<<<<< HEAD
 import { app, db } from "../firebase/Config";
+=======
+import { app, db } from "../firebase/config";
+>>>>>>> 472039997f10b0868e6b3510de0ea15d78ff4094
 import { doc, setDoc } from "firebase/firestore";
 
 // Pantalla de registro

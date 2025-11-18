@@ -10,10 +10,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import NavBar from "../components/NavBar";
-import { money } from "../utils/Format";
-import useThemeColors from "../styles/Themes";
+import { money } from "../utils/format";
+import useThemeColors from "../styles/themes";
 import { useCart } from "../context/CartContext";
 import { useUi } from "../context/UiContext";
+
+
 
 export default function ProductDetailScreen({ route, navigation }) {
   const { colors } = useThemeColors();
