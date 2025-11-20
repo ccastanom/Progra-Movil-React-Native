@@ -14,8 +14,7 @@ import { money } from "../utils/format";
 import useThemeColors from "../styles/themes";
 import { useCart } from "../context/CartContext";
 import { useUi } from "../context/UiContext";
-
-
+import { FontFamily as fonts } from "../styles/fonts";
 
 export default function ProductDetailScreen({ route, navigation }) {
   const { colors } = useThemeColors();
@@ -70,7 +69,7 @@ export default function ProductDetailScreen({ route, navigation }) {
         Precio: {money(product.price)}
       </Text>
 
-      {/* Descripcion */}
+      {/* Descripción */}
       {product.description ? (
         <Text
           style={[
@@ -88,7 +87,14 @@ export default function ProductDetailScreen({ route, navigation }) {
           onPress={() => setQty((q) => Math.max(1, q - 1))}
           style={[styles.qtyButton, { backgroundColor: colors.card }]}
         >
-          <Text style={[styles.qtyBtnText, { color: colors.text }]}>-</Text>
+          <Text
+            style={[
+              styles.qtyBtnText,
+              { color: colors.text, fontSize: 20 * fontScale },
+            ]}
+          >
+            -
+          </Text>
         </TouchableOpacity>
 
         <Text
@@ -104,7 +110,14 @@ export default function ProductDetailScreen({ route, navigation }) {
           onPress={() => setQty((q) => q + 1)}
           style={[styles.qtyButton, { backgroundColor: colors.card }]}
         >
-          <Text style={[styles.qtyBtnText, { color: colors.text }]}>+</Text>
+          <Text
+            style={[
+              styles.qtyBtnText,
+              { color: colors.text, fontSize: 20 * fontScale },
+            ]}
+          >
+            +
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -139,28 +152,33 @@ export default function ProductDetailScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
 
   heroImage: {
     width: "100%",
     height: 260,
-    borderRadius: 16,
-    marginTop: 75,
+    borderRadius: 18,
+    marginTop: 80, // deja espacio bajo el NavBar
     marginBottom: 16,
     resizeMode: "cover",
     borderWidth: 1,
   },
 
   title: {
-    fontWeight: "bold",
+    fontFamily: fonts.bold,
     marginBottom: 6,
   },
 
   price: {
+    fontFamily: fonts.medium,
     marginBottom: 12,
   },
 
   description: {
+    fontFamily: fonts.regular,
     lineHeight: 22,
     marginBottom: 16,
   },
@@ -174,28 +192,28 @@ const styles = StyleSheet.create({
   },
 
   qtyText: {
-    fontWeight: "600",
+    fontFamily: fonts.semibold,
   },
 
   qtyButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 8,
+    width: 38,
+    height: 38,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
     elevation: 2,
   },
 
   qtyBtnText: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: fonts.bold,
   },
 
   total: {
-    fontWeight: "bold",
+    fontFamily: fonts.bold,
     textAlign: "center",
     marginBottom: 16,
   },
@@ -203,24 +221,26 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 8,
-    gap: 10,
+    width: "100%",
+    marginTop: 12,
+    gap: 12,
   },
 
   actionButton: {
     flex: 1,
     paddingVertical: 12,
-    borderRadius: 10,
+    borderRadius: 18,
     alignItems: "center",
     shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 6,
+    elevation: 2,
   },
 
   actionText: {
     color: "#fff",
-    fontWeight: "bold",
     fontSize: 15,
+    fontFamily: fonts.bold,
   },
 });
