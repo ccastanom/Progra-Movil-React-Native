@@ -1,4 +1,3 @@
-// src/screens/ProductListScreen.js
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -51,13 +50,16 @@ export default function ProductListScreen({ navigation }) {
     fetchProducts();
   }, []);
 
-  // Renderizar cada tarjeta de producto
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate("ProductDetail", { product: item })}
       style={[
         styles.card,
-        { backgroundColor: colors.card, borderColor: colors.border },
+        {
+          backgroundColor: colors.card,
+          shadowColor: "#000",
+          borderColor: colors.border,
+        },
       ]}
     >
       {item.image || item.imageUrl ? (
@@ -89,7 +91,7 @@ export default function ProductListScreen({ navigation }) {
       <Text
         style={[
           styles.cardTitle,
-          { color: colors.text, fontSize: 18 * fontScale },
+          { color: colors.text, fontSize: 16 * fontScale },
         ]}
         numberOfLines={1}
       >
@@ -100,7 +102,7 @@ export default function ProductListScreen({ navigation }) {
       <Text
         style={[
           styles.cardPrice,
-          { color: colors.subtext, fontSize: 16 * fontScale },
+          { color: colors.subtext, fontSize: 14 * fontScale },
         ]}
       >
         ${item.price?.toLocaleString() || "0"}
@@ -110,7 +112,7 @@ export default function ProductListScreen({ navigation }) {
       <Text
         style={[
           styles.cardLink,
-          { color: colors.primary, fontSize: 16 * fontScale },
+          { color: colors.primary, fontSize: 13 * fontScale },
         ]}
       >
         Ver detalle
@@ -145,30 +147,45 @@ export default function ProductListScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
-      <NavBar />
+      {/* HEADER LIMPIO */}
+      <View style={[styles.header, { backgroundColor: colors.bg }]}>
+        <Text
+          style={{
+            color: colors.primary,
+            fontSize: 22 * fontScale,
+            fontFamily: "CrystalTitle", // Crystal Radio Kit
+            letterSpacing: 1,
+          }}
+        >
+          QUE ROLLO
+        </Text>
 
-      <ImageBackground
-        source={require("../../assets/fondo.jpeg")}
-        style={styles.headerImage}
-        imageStyle={{ resizeMode: "cover", opacity: 0.4 }}
-      >
         <Text
           style={[
             styles.headerTitle,
-            { color: "#fff", fontSize: 28 * fontScale },
+            { color: colors.text, fontSize: 18 * fontScale },
           ]}
         >
           Recomendados para ti
         </Text>
-      </ImageBackground>
+
+        <Text
+          style={[
+            styles.headerSubtitle,
+            { color: colors.subtext, fontSize: 13 * fontScale },
+          ]}
+        >
+          Selección dulce pensada para tus antojos del día de hoy
+        </Text>
+      </View>
 
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         numColumns={2}
-        contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24 }}
+        columnWrapperStyle={{ justifyContent: "space-between", marginTop: 8 }}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -176,32 +193,42 @@ export default function ProductListScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  headerImage: { height: 150, justifyContent: "flex-end" },
+  /* HEADER */
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 14,
+    marginBottom: 4,
+  },
   headerTitle: {
-    padding: 16,
-    fontFamily: fonts.extrabold,
-
+    marginTop: 6,
+    fontFamily: fonts.bold,
+  },
+  headerSubtitle: {
+    marginTop: 4,
+    fontFamily: fonts.regular,
+    lineHeight: 18,
   },
 
+  /* CARD */
   card: {
     width: CARD_WIDTH,
     alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 14,
+    borderWidth: 0.5,
+    borderRadius: 20,
     padding: 12,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 6,
-    elevation: 4,
+    elevation: 1.5,
   },
   thumb: {
     width: "100%",
-    height: CARD_WIDTH - 40,
-    borderRadius: 10,
+    height: CARD_WIDTH - 28,
+    borderRadius: 16,
     resizeMode: "cover",
-    marginBottom: 8,
+    marginBottom: 10,
   },
   cardTitle: {
     textAlign: "center",
@@ -212,9 +239,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.medium,
   },
   cardLink: {
-    marginTop: 4,
+    marginTop: 6,
     textDecorationLine: "underline",
     fontFamily: fonts.semibold,
   },
 });
-

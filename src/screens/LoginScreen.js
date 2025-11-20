@@ -13,9 +13,11 @@ import SvgIcon from "../../assets/SvgIcon";
 import useThemeColors from "../styles/themes";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../firebase/config";
-import { sendWelcomeNotification, scheduleRecommendationsNotification,} from "../utils/notifications";
-import {FontFamily as fonts} from "../styles/fonts";
-
+import {
+  sendWelcomeNotification,
+  scheduleRecommendationsNotification,
+} from "../utils/notifications";
+import { FontFamily as fonts } from "../styles/fonts";
 
 export default function LoginScreen({ navigation }) {
   const { colors } = useThemeColors();
@@ -46,27 +48,20 @@ export default function LoginScreen({ navigation }) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       //Alert.alert("Bienvenido a Que Rollo ❤", "Inicio de sesión exitoso");
-      
 
       navigation.replace("Principal");
 
-      
-
-
       try {
-      sendWelcomeNotification(email).catch((err) =>
-        console.log("Error en notificación de bienvenida:", err)
-      );
+        sendWelcomeNotification(email).catch((err) =>
+          console.log("Error en notificación de bienvenida:", err)
+        );
 
-      scheduleRecommendationsNotification().catch((err) =>
-        console.log("Error en notificación de recomendados:", err)
-      );
+        scheduleRecommendationsNotification().catch((err) =>
+          console.log("Error en notificación de recomendados:", err)
+        );
       } catch (e) {
-      console.log("Error general al disparar notificaciones:", e);
+        console.log("Error general al disparar notificaciones:", e);
       }
-
-
-
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
       let message = "Pero no te preocupes, no es tu culpa.";
@@ -102,95 +97,80 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.bg }]}>
-      {/* NavBar */}
-      <View style={[styles.navBar, { backgroundColor: colors.card }]}>
-        <View style={styles.logoWrap}>
-          <SvgIcon width={40} height={40} />
-        </View>
-        <Text style={[styles.brand, { color: colors.primary }]}>QUE ROLLO</Text>
-        <View style={{ width: 28 }} />
-      </View>
-
-      {/* Imagen de fondo */}
-      <ImageBackground
-        source={require("../../assets/fondo.jpeg")}
-        style={styles.headerImage}
-        imageStyle={{ resizeMode: "cover" }}
-      >
-        <View style={styles.headerTextWrap}>
-          <Text style={styles.headerText}>
-            El rollo perfecto para cada antojo 😋
+      <View style={styles.centerWrapper}>
+        <View style={styles.header}>
+          <SvgIcon width={90} height={90} />
+          <Text style={[styles.brand, { color: colors.primary }]}>
+            QUE ROLLO
           </Text>
+
+          <Text style={styles.slogan}>Pasteleria artesanal</Text>
+
+          <Text style={styles.question}>¿Ya tienes cuenta?</Text>
+          <Text style={styles.subtitle}>Inicia sesión para continuar</Text>
         </View>
-      </ImageBackground>
 
-      {/* Formulario */}
-      <View style={styles.content}>
-        <TextInput
-          placeholder="Correo electrónico"
-          placeholderTextColor={colors.subtext}
-          style={[
-            styles.input,
-            {
-              borderColor: colors.primary,
-              color: colors.text,
-              backgroundColor: colors.card,
-            },
-          ]}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
+        {/* FORMULARIO */}
+        <View style={styles.form}>
+          <TextInput
+            placeholder="Correo electrónico"
+            placeholderTextColor={colors.subtext}
+            style={[
+              styles.input,
+              {
+                borderColor: colors.border ?? "#E3E3E3",
+                color: colors.text,
+                backgroundColor: colors.card,
+              },
+            ]}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+          />
 
-        <TextInput
-          placeholder="Contraseña"
-          placeholderTextColor={colors.subtext}
-          style={[
-            styles.input,
-            {
-              borderColor: colors.primary,
-              color: colors.text,
-              backgroundColor: colors.card,
-            },
-          ]}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+          <TextInput
+            placeholder="Contraseña"
+            placeholderTextColor={colors.subtext}
+            style={[
+              styles.input,
+              {
+                borderColor: colors.border ?? "#E3E3E3",
+                color: colors.text,
+                backgroundColor: colors.card,
+              },
+            ]}
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
 
-        {/* Botón de iniciar sesión */}
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: colors.primary }]}
-          onPress={handleLogin}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>
-              {DEV_MODE ? "Entrar (modo desarrollo)" : "Iniciar sesión"}
-            </Text>
-          )}
-        </TouchableOpacity>
-
-        {/* Registro */}
-        {!DEV_MODE && (
           <TouchableOpacity
-            onPress={() => navigation.navigate("Register")}
-            style={{ marginTop: 12 }}
+            style={[styles.button, { backgroundColor: colors.primary }]}
+            onPress={handleLogin}
+            disabled={loading}
           >
-            <Text style={{ color: colors.text }}>
-              ¿No tienes cuenta?{" "}
-              <Text style={{ color: colors.primary, fontWeight: "bold" }}>
-                Regístrate
-              </Text>
-            </Text>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Iniciar sesión</Text>
+            )}
           </TouchableOpacity>
-        )}
 
-        <View style={styles.imgEnd}>
-          <SvgIcon width={300} height={300} />
+          {!DEV_MODE && (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Register")}
+              style={{ marginTop: 16 }}
+            >
+              <Text style={[styles.registerText, { color: colors.text }]}>
+                ¿No tienes cuenta?
+                <Text style={{ color: colors.primary, fontFamily: fonts.bold }}>
+                  {" "}
+                  Regístrate
+                </Text>
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
@@ -198,54 +178,81 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  headerImage: {
-    width: "105%",
-    height: 400,
-    justifyContent: "flex-end",
-    padding: 20,
+  container: {
+    flex: 1,
   },
-  headerTextWrap: {
-    backgroundColor: "rgba(0,0,0,0.4)",
-    padding: 12,
-    borderRadius: 8,
+
+  centerWrapper: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
   },
-  headerText: {
-    fontSize: 26,
-    color: "#fff",
-    fontWeight: "700",
+
+  header: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  brand: {
+    fontSize: 30,
+    fontFamily: "CrystalTitle",
+    letterSpacing: 1,
+    marginTop: 6,
+  },
+  slogan: {
+    fontSize: 14,
+    fontFamily: "BalooRegular",
     textAlign: "center",
-    fontFamily: fonts.extrabold,
+    marginTop: 4,
+    paddingHorizontal: 30,
   },
-  content: { flex: 1, alignItems: "center", padding: 20, width: "100%" },
+  question: {
+    fontSize: 18,
+    fontFamily: "BalooBold",
+    marginTop: 14,
+  },
+  subtitle: {
+    fontSize: 14,
+    fontFamily: "BalooRegular",
+    color: "#666",
+  },
+
+  form: {
+    width: "100%",
+    maxWidth: 340,
+    alignItems: "center",
+  },
   input: {
     width: "100%",
-    borderWidth: 1.5,
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 12,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 10,
+    fontFamily: "BalooRegular",
+    fontSize: 14,
   },
   button: {
-    paddingVertical: 14,
-    borderRadius: 30,
-    width: "100%",
+    paddingVertical: 11,
+    borderRadius: 999,
+    width: "75%",
+    maxWidth: 240,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 6,
+    shadowColor: "#000",
+    shadowOpacity: 0.12,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 10,
+    elevation: 2,
   },
-  buttonText: { color: "#fff", fontSize: 19, fontFamily: fonts.bold, },
-  imgEnd: { opacity: 0.5, marginTop: 30 },
-  navBar: {
-    height: 75,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontFamily: "BalooBold",
   },
-  logoWrap: { justifyContent: "center", alignItems: "center" },
-  brand: { fontSize: 24, fontWeight:"800", fontFamily: fonts.extrabold, letterSpacing: 1, },
+  registerText: {
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 6,
+  },
 });
