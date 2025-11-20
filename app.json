@@ -20,7 +20,15 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
+
+      "notification": {
+        "icon": "./assets/notification-icon.png",
+        "color": "#ffffff"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

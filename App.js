@@ -5,19 +5,24 @@ import MainNavigator from "./src/navigation/AppNavigator";
 import { CartProvider } from "./src/context/CartContext";
 import { LogBox, Alert, Platform, Text } from "react-native";
 import { useEffect, useState } from "react";
+import React from "react";
 
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import * as Font from "expo-font";
 
+import usePushNotifications from "./src/hooks/usePushNotifications"; 
+
+// Ocultar logs
 LogBox.ignoreAllLogs(true);
 console.log = () => {};
 console.warn = () => {};
 console.error = () => {};
 
+// NOTIFICATION HANDLER 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: false,
+    shouldShowAlert: true,
     shouldShowBanner: true,
     shouldShowList: true,
     shouldPlaySound: true,
@@ -25,6 +30,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
+// Pedir permisos
 async function registerForPushNotificationsAsync() {
   if (!Device.isDevice) return;
 
@@ -52,6 +58,15 @@ async function registerForPushNotificationsAsync() {
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  const expoPushToken = usePushNotifications();
+
+  useEffect(() => {
+    if (expoPushToken) {
+      console.log("TOKEN FCM / EXPO:", expoPushToken);
+      // TODO: GUARDARLO EN FIRESTORE O EN TU API
+    }
+  }, [expoPushToken]);
+
   useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
@@ -63,7 +78,6 @@ export default function App() {
         CrystalTitle: require("./assets/fonts/Crystal Radio Kit.otf"),
       });
 
-      //  Fuente global
       Text.defaultProps = Text.defaultProps || {};
       Text.defaultProps.style = {
         fontFamily: "BalooRegular",
@@ -74,8 +88,8 @@ export default function App() {
         const origin = oldRender.call(this, ...args);
         return React.cloneElement(origin, {
           style: [
-            { fontFamily: "BalooRegular"}, // defecto
-            origin.props.style, // respeta la personalizacion
+            { fontFamily: "BalooRegular" },
+            origin.props.style,
           ],
         });
       };
@@ -99,4 +113,3 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-

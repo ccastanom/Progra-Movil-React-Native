@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "398011177601",
+    "project_id": "querollo-b7d3a",
+    "storage_bucket": "querollo-b7d3a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398011177601:android:51d920a5a22ba01f49cb80",
+        "android_client_info": {
+          "package_name": "com.shoangomez.QUEROLLO"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQX8jzrdODiAw3cEGIUgfD1kziJYzmHwc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
