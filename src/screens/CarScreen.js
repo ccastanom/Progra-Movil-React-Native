@@ -28,14 +28,18 @@ export default function Car() {
   if (cartItems.length === 0) {
     return (
       <View style={[styles.container, { backgroundColor: colors.bg }]}>
-        <Text
-          style={[
-            styles.empty,
-            { color: colors.subtext, fontSize: 18 * fontScale },
-          ]}
-        >
-          Tu carrito está vacío
-        </Text>
+        <NavBar showBack={true} />
+
+        <View style={styles.emptyWrap}>
+          <Text
+            style={[
+              styles.empty,
+              { color: colors.subtext, fontSize: 18 * fontScale },
+            ]}
+          >
+            Tu carrito está vacío
+          </Text>
+        </View>
       </View>
     );
   }
@@ -55,7 +59,6 @@ export default function Car() {
               { backgroundColor: colors.card, borderColor: colors.border },
             ]}
           >
-            {/* Imagen del producto */}
             {item.image ? (
               <Image source={{ uri: item.image }} style={styles.image} />
             ) : (
@@ -75,7 +78,7 @@ export default function Car() {
               </View>
             )}
 
-            {/* Informacion del producto */}
+            {/* Info */}
             <View style={styles.info}>
               <Text
                 style={[
@@ -85,12 +88,15 @@ export default function Car() {
               >
                 {item.name}
               </Text>
+
               <Text style={[styles.price, { color: colors.subtext }]}>
                 Precio: {money(item.price)}
               </Text>
+
               <Text style={[styles.quantity, { color: colors.subtext }]}>
                 Cantidad: {item.quantity || 1}
               </Text>
+
               <Text style={[styles.subtotal, { color: colors.text }]}>
                 Subtotal: {money(item.price * (item.quantity || 1))}
               </Text>
@@ -105,8 +111,12 @@ export default function Car() {
         )}
       />
 
-      {/* Total y botones */}
-      <View style={styles.totalContainer}>
+      <View
+        style={[
+          styles.totalContainer,
+          { backgroundColor: colors.bg, borderTopColor: colors.border },
+        ]}
+      >
         <Text
           style={[
             styles.totalText,
@@ -120,9 +130,7 @@ export default function Car() {
           style={[styles.buyButton, { backgroundColor: colors.primary }]}
           onPress={() => navigation.navigate("Checkout", { total })}
         >
-          <Text style={[styles.buyText, { fontSize: 16 * fontScale }]}>
-            Finalizar compra
-          </Text>
+          <Text style={styles.buyText}>Finalizar compra</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -143,36 +151,102 @@ export default function Car() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
+
+  emptyWrap: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  empty: {
+    fontWeight: "500",
+    textAlign: "center",
+  },
+
   item: {
     flexDirection: "row",
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    borderWidth: 1,
-  },
-  image: { width: 60, height: 60, borderRadius: 10 },
-  info: { flex: 1, marginLeft: 10 },
-  name: { fontWeight: "bold" },
-  price: { marginTop: 4 },
-  quantity: { marginTop: 2 },
-  subtotal: { marginTop: 4, fontWeight: "bold" },
-  remove: { marginTop: 8 },
-  empty: { textAlign: "center", marginTop: 50 },
-  totalContainer: { marginTop: 20, alignItems: "center" },
-  totalText: { fontWeight: "bold", marginBottom: 10 },
-  buyButton: {
     padding: 12,
-    borderRadius: 10,
-    width: "80%",
-    alignItems: "center",
-    marginBottom: 10,
+    borderRadius: 18,
+    marginBottom: 12,
+    borderWidth: 1,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+    gap: 12,
   },
-  buyText: { color: "#fff", fontWeight: "bold" },
+
+  image: {
+    width: 70,
+    height: 70,
+    borderRadius: 12,
+  },
+
+  info: { flex: 1 },
+
+  name: {
+    fontWeight: "700",
+    marginBottom: 2,
+  },
+
+  price: {},
+  quantity: {},
+  subtotal: {
+    marginTop: 4,
+    fontWeight: "700",
+  },
+
+  remove: {
+    marginTop: 6,
+    fontWeight: "600",
+    textDecorationLine: "underline",
+  },
+
+  totalContainer: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 25,
+    borderTopWidth: 1,
+    alignItems: "center",
+    gap: 10,
+  },
+
+  totalText: {
+    fontWeight: "700",
+    marginBottom: 4,
+  },
+
+  buyButton: {
+    width: "100%",
+    paddingVertical: 13,
+    borderRadius: 16,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 6,
+    elevation: 2,
+  },
+
+  buyText: {
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+
   clearButton: {
-    padding: 10,
-    borderRadius: 10,
-    width: "80%",
+    width: "100%",
+    paddingVertical: 12,
+    borderRadius: 16,
     alignItems: "center",
   },
-  clearText: { fontWeight: "bold" },
+
+  clearText: {
+    fontSize: 14,
+    fontWeight: "700",
+  },
 });
