@@ -21,20 +21,19 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-
-      "googleServicesFile": "./google-services.json",
-      "useNextNotificationsApi": true,
-
-      "notification": {
-        "icon": "./assets/notification-icon.png",
-        "color": "#ffffff"
-      }
+      "package": "com.shoangomez.QUEROLLO",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "35c3d804-bcb4-4686-b839-e496e7e292dd"
+      }
+    }
   }
 }

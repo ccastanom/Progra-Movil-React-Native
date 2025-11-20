@@ -1,9 +1,10 @@
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import * as Device from "expo-device";
+import Constants from "expo-constants";
 
 export default function usePushNotifications() {
-  const [expoPushToken, setExpoPushToken] = useState(null);
+  const [fcmToken, setFcmToken] = useState(null);
 
   useEffect(() => {
     registerForPushNotifications();
@@ -12,18 +13,28 @@ export default function usePushNotifications() {
   async function registerForPushNotifications() {
     if (!Device.isDevice) return;
 
-    const { status } = await Notifications.requestPermissionsAsync();
-    if (status !== "granted") {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+
+    if (finalStatus !== "granted") {
       alert("Los permisos de notificación fueron denegados.");
       return;
     }
 
-    const token = await Notifications.getExpoPushTokenAsync({
-      projectId: "TU_PROJECT_ID_DE_EXPO",
-    });
+    // 🟢 OBTENER TOKEN FCM REAL
+    const token = await Notifications.getDevicePushTokenAsync();
 
-    setExpoPushToken(token.data);
+    console.log("🔥 TOKEN FCM REAL:", token.data);
+
+    setFcmToken(token.data);
+
+    return token.data;
   }
 
-  return expoPushToken;
+  return fcmToken;
 }
